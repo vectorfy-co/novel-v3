@@ -83,14 +83,14 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },
-  "author": "Steven Tey <stevensteel97@gmail.com>",
-  "homepage": "https://novel.sh",
+  "author": "Andrew M",
+  "homepage": "https://github.com/andrewmaspero/novel-v3",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/steven-tey/novel.git"
+    "url": "git+https://github.com/andrewmaspero/novel-v3.git"
   },
   "bugs": {
-    "url": "https://github.com/steven-tey/novel/issues"
+    "url": "https://github.com/andrewmaspero/novel-v3/issues"
   },
   "keywords": [
     "ai",

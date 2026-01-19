@@ -3,7 +3,7 @@
     "changelog": [
         "@changesets/changelog-github",
         {
-            "repo": "steven-tey/novel"
+            "repo": "andrewmaspero/novel-v3"
         }
     ],
     "commit": false,
