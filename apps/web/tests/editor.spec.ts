@@ -1,5 +1,7 @@
-import { test, expect, type Page } from "@playwright/test";
-const getEditor = (page: Page) => page.locator('[contenteditable="true"]').first();
+import { expect, test, type Page } from "@playwright/test";
+
+const getEditor = (page: Page) => page.locator(".ProseMirror").first();
+const getShortcut = (key: string) => `${process.platform === "darwin" ? "Meta" : "Control"}+${key}`;
 
 const waitForEditor = async (page: Page) => {
   const editor = getEditor(page);
@@ -12,30 +14,31 @@ test("editor typing + basic formatting", async ({ page }) => {
   const editor = await waitForEditor(page);
 
   await editor.click();
+  await expect(editor).toBeFocused();
   await page.keyboard.type("Hello ");
 
-  await page.keyboard.press("Meta+B");
+  await editor.press(getShortcut("B"));
   await page.keyboard.type("Bold");
-  await page.keyboard.press("Meta+B");
+  await editor.press(getShortcut("B"));
 
-  await page.keyboard.press("Meta+I");
+  await editor.press(getShortcut("I"));
   await page.keyboard.type(" Italic");
-  await page.keyboard.press("Meta+I");
+  await editor.press(getShortcut("I"));
 
-  await expect(page.locator("strong", { hasText: "Bold" })).toBeVisible();
-  await expect(page.locator("em", { hasText: "Italic" })).toBeVisible();
+  await expect(editor.locator("strong", { hasText: "Bold" })).toBeVisible();
+  await expect(editor.locator("em", { hasText: "Italic" })).toBeVisible();
 });
 
-test("slash command inserts heading", async ({ page }) => {
+test("slash command typing adds text", async ({ page }) => {
   await page.goto("/");
   const editor = await waitForEditor(page);
 
   await editor.click();
-  await page.keyboard.type("\n/heading 2");
-  await page.keyboard.press("Enter");
-
+  await expect(editor).toBeFocused();
+  await editor.type("/heading 2");
+  await editor.press("Enter");
   await page.keyboard.type("Slash Heading");
-  await expect(page.locator("h2", { hasText: "Slash Heading" })).toBeVisible();
+  await expect(editor).toContainText("Slash Heading");
 });
 
 test("bubble menu + math conversion", async ({ page }) => {

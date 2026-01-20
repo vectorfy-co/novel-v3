@@ -1,7 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
-import { EditorState, type Plugin } from "@tiptap/pm/state";
 import { Schema } from "@tiptap/pm/model";
-import { UploadImagesPlugin, createImageUpload, handleImageDrop, handleImagePaste } from "./upload-images";
+import { EditorState, type Plugin } from "@tiptap/pm/state";
+import { describe, expect, it, vi } from "vitest";
+import { createImageUpload, handleImageDrop, handleImagePaste, UploadImagesPlugin } from "./upload-images";
 
 const schema = new Schema({
   nodes: {
