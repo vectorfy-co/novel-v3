@@ -1,3 +1,4 @@
+import { Command, createSuggestionItems, renderItems } from "@vectorfyco/novel-v3/client";
 import {
   CheckSquare,
   Code,
@@ -13,7 +14,6 @@ import {
   Twitter,
   Youtube,
 } from "lucide-react";
-import { Command, createSuggestionItems, renderItems } from "@vectorfyco/novel-v3/client";
 import { uploadFn } from "./image-upload";
 
 export const suggestionItems = createSuggestionItems([

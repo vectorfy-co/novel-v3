@@ -1,7 +1,7 @@
+import { useEditor } from "@vectorfyco/novel-v3/client";
+import { SigmaIcon } from "lucide-react";
 import { Button } from "@/components/tailwind/ui/button";
 import { cn } from "@/lib/utils";
-import { SigmaIcon } from "lucide-react";
-import { useEditor } from "@vectorfyco/novel-v3/client";
 
 export const MathSelector = () => {
   const { editor } = useEditor();

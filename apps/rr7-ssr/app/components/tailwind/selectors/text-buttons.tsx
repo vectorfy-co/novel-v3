@@ -1,7 +1,7 @@
+import { EditorBubbleItem, useEditor } from "@vectorfyco/novel-v3/client";
+import { BoldIcon, CodeIcon, ItalicIcon, StrikethroughIcon, UnderlineIcon } from "lucide-react";
 import { Button } from "~/components/tailwind/ui/button";
 import { cn } from "~/lib/utils";
-import { BoldIcon, CodeIcon, ItalicIcon, StrikethroughIcon, UnderlineIcon } from "lucide-react";
-import { EditorBubbleItem, useEditor } from "@vectorfyco/novel-v3/client";
 import type { SelectorItem } from "./node-selector";
 
 export const TextButtons = () => {

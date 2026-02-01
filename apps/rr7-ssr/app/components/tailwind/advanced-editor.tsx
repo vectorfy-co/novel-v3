@@ -1,5 +1,3 @@
-
-import { defaultEditorContent } from "~/lib/content";
 import {
   EditorCommand,
   EditorCommandEmpty,
@@ -8,27 +6,27 @@ import {
   EditorContent,
   type EditorInstance,
   EditorRoot,
-  ImageResizer,
-  type JSONContent,
   getAllContent,
   handleCommandNavigation,
   handleImageDrop,
   handleImagePaste,
+  ImageResizer,
+  type JSONContent,
 } from "@vectorfyco/novel-v3/client";
+import hljs from "highlight.js";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
+import { defaultEditorContent } from "~/lib/content";
 import { defaultExtensions } from "./extensions";
+import GenerativeMenuSwitch from "./generative/generative-menu-switch";
+import { uploadFn } from "./image-upload";
 import { ColorSelector } from "./selectors/color-selector";
 import { LinkSelector } from "./selectors/link-selector";
 import { MathSelector } from "./selectors/math-selector";
 import { NodeSelector } from "./selectors/node-selector";
-import { Separator } from "./ui/separator";
-
-import GenerativeMenuSwitch from "./generative/generative-menu-switch";
-import { uploadFn } from "./image-upload";
 import { TextButtons } from "./selectors/text-buttons";
 import { slashCommand, suggestionItems } from "./slash-command";
-import hljs from "highlight.js";
+import { Separator } from "./ui/separator";
 
 const extensions = [...defaultExtensions, slashCommand];
 
@@ -73,7 +71,9 @@ const TailwindAdvancedEditor = () => {
     <div className="relative w-full max-w-[1024px]">
       <div className="flex absolute right-5 top-5 z-10 mb-5 gap-2">
         <div className="rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground">{saveStatus}</div>
-        <div className={charsCount !== null ? "rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground" : "hidden"}>
+        <div
+          className={charsCount !== null ? "rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground" : "hidden"}
+        >
           {charsCount} Words
         </div>
       </div>

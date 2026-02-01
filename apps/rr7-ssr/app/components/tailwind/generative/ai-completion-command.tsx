@@ -1,14 +1,8 @@
-import { CommandGroup, CommandItem, CommandSeparator } from "../ui/command";
 import { useEditor } from "@vectorfyco/novel-v3/client";
 import { Check, TextQuote, TrashIcon } from "lucide-react";
+import { CommandGroup, CommandItem, CommandSeparator } from "../ui/command";
 
-const AICompletionCommands = ({
-  completion,
-  onDiscard,
-}: {
-  completion: string;
-  onDiscard: () => void;
-}) => {
+const AICompletionCommands = ({ completion, onDiscard }: { completion: string; onDiscard: () => void }) => {
   const { editor } = useEditor();
   return (
     <>
