@@ -189,8 +189,8 @@ packages/
 | OPENAI_API_KEY | yes | - | string | OpenAI API key for `/api/generate` streaming responses. |
 | OPENAI_BASE_URL | no | https://api.openai.com/v1 | URL | Optional OpenAI-compatible base URL override. |
 | BLOB_READ_WRITE_TOKEN | no | - | string | Vercel Blob token for `/api/upload` image storage. |
-| KV_REST_API_URL | no | - | URL | Upstash KV URL enabling per-IP rate limiting. |
-| KV_REST_API_TOKEN | no | - | string | Upstash KV token enabling per-IP rate limiting. |
+| KV_REST_API_URL | no | - | URL | Upstash Redis REST URL enabling per-IP rate limiting. |
+| KV_REST_API_TOKEN | no | - | string | Upstash Redis REST token enabling per-IP rate limiting. |
 
 ### ![RR7 Env](https://img.shields.io/badge/RR7%20SSR-env%20vars-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 
