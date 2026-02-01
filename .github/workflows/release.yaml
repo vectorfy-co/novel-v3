@@ -49,6 +49,6 @@ jobs:
       - name: Bump and tag if needed
         id: release
         env:
-          RELEASE_PATHS: packages/headless/src,packages/headless/package.json,packages/headless/tsup.config.ts,packages/headless/tsconfig.json,packages/headless/biome.json
+          RELEASE_PATHS: packages/headless/src,packages/headless/package.json,packages/headless/tsup.config.ts,packages/headless/tsconfig.json,packages/headless/biome.json,pnpm-lock.yaml
         run: |
           uv run --python 3.12 scripts/release_novel.py --commit --tag --push
