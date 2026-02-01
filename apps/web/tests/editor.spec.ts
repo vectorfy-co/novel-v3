@@ -49,11 +49,7 @@ test("bubble menu + math conversion", async ({ page }) => {
   await page.keyboard.type("\nE=mc^2");
   const katexBefore = await page.locator(".ProseMirror .katex").count();
 
-  await page.keyboard.down("Shift");
-  for (let i = 0; i < 6; i += 1) {
-    await page.keyboard.press("ArrowLeft");
-  }
-  await page.keyboard.up("Shift");
+  await editor.press(getShortcut("A"));
 
   const askAi = page.getByRole("button", { name: /ask ai/i });
   await expect(askAi).toBeVisible();
