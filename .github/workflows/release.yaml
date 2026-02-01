@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   bump:
@@ -52,3 +53,14 @@ jobs:
           RELEASE_PATHS: packages/headless/src,packages/headless/package.json,packages/headless/tsup.config.ts,packages/headless/tsconfig.json,packages/headless/biome.json,pnpm-lock.yaml
         run: |
           uv run --python 3.12 scripts/release_novel.py --commit --tag --push
+    outputs:
+      release: ${{ steps.release.outputs.release }}
+      version: ${{ steps.release.outputs.version }}
+
+  publish:
+    needs: bump
+    if: needs.bump.outputs.release == 'true'
+    uses: ./.github/workflows/publish.yaml
+    with:
+      tag: v${{ needs.bump.outputs.version }}
+    secrets: inherit
