@@ -1,5 +1,5 @@
 {
-  "name": "novel-monorepo",
+  "name": "novel-v3",
   "private": true,
   "scripts": {
     "changeset": "changeset",

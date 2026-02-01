@@ -14,7 +14,7 @@ import {
   handleCommandNavigation,
   handleImageDrop,
   handleImagePaste,
-} from "@vectorfy/novel/client";
+} from "@vectorfyco/novel-v3/client";
 import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { defaultExtensions } from "./extensions";

@@ -1,13 +1,26 @@
 import { useAtom, useSetAtom } from "jotai";
-import { useEffect, forwardRef, createContext } from "react";
+import { useEffect, forwardRef, createContext, useContext, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { queryAtom, rangeAtom } from "../utils/atoms";
 import { novelStore } from "../utils/store";
-import type tunnel from "tunnel-rat";
-import type { ComponentPropsWithoutRef, FC } from "react";
+import type { ComponentPropsWithoutRef, FC, ReactNode } from "react";
 import type { Range } from "@tiptap/core";
 
-export const EditorCommandTunnelContext = createContext({} as ReturnType<typeof tunnel>);
+interface PortalContextValue {
+  portalContainer: HTMLElement | null;
+  setPortalContainer: (container: HTMLElement | null) => void;
+}
+
+export const EditorCommandPortalContext = createContext<PortalContextValue>({
+  portalContainer: null,
+  setPortalContainer: () => {},
+});
+
+export const useEditorCommandPortal = () => {
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+  return { portalContainer, setPortalContainer };
+};
 
 interface EditorCommandOutProps {
   readonly query: string;
@@ -17,6 +30,14 @@ interface EditorCommandOutProps {
 export const EditorCommandOut: FC<EditorCommandOutProps> = ({ query, range }) => {
   const setQuery = useSetAtom(queryAtom, { store: novelStore });
   const setRange = useSetAtom(rangeAtom, { store: novelStore });
+  const { setPortalContainer } = useContext(EditorCommandPortalContext);
+
+  const containerRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      setPortalContainer(node);
+    },
+    [setPortalContainer],
+  );
 
   useEffect(() => {
     setQuery(query);
@@ -51,37 +72,32 @@ export const EditorCommandOut: FC<EditorCommandOutProps> = ({ query, range }) =>
     };
   }, []);
 
-  return (
-    <EditorCommandTunnelContext.Consumer>
-      {(tunnelInstance) => <tunnelInstance.Out />}
-    </EditorCommandTunnelContext.Consumer>
-  );
+  return <div ref={containerRef} />;
 };
 
 export const EditorCommand = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<typeof Command>>(
   ({ children, className, ...rest }, ref) => {
     const [query, setQuery] = useAtom(queryAtom);
+    const { portalContainer } = useContext(EditorCommandPortalContext);
 
-    return (
-      <EditorCommandTunnelContext.Consumer>
-        {(tunnelInstance) => (
-          <tunnelInstance.In>
-            <Command
-              ref={ref}
-              onKeyDown={(e) => {
-                e.stopPropagation();
-              }}
-              id="slash-command"
-              className={className}
-              {...rest}
-            >
-              <Command.Input value={query} onValueChange={setQuery} style={{ display: "none" }} />
-              {children}
-            </Command>
-          </tunnelInstance.In>
-        )}
-      </EditorCommandTunnelContext.Consumer>
+    const content = (
+      <Command
+        ref={ref}
+        onKeyDown={(e) => {
+          e.stopPropagation();
+        }}
+        id="slash-command"
+        className={className}
+        {...rest}
+      >
+        <Command.Input value={query} onValueChange={setQuery} style={{ display: "none" }} />
+        {children}
+      </Command>
     );
+
+    if (!portalContainer) return null;
+
+    return createPortal(content, portalContainer);
   },
 );
 export const EditorCommandList = Command.List;

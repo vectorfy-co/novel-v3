@@ -1,3 +1,4 @@
+# novel-v3 workspace configuration
 packages:
   - "apps/*"
   - "packages/*"

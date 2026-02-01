@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { EditorCommand, EditorCommandOut, EditorCommandTunnelContext } from "./editor-command";
+import { EditorCommand, EditorCommandOut, EditorCommandPortalContext } from "./editor-command";
 import { novelStore } from "../utils/store";
 import { queryAtom, rangeAtom } from "../utils/atoms";
 
@@ -34,10 +34,7 @@ vi.mock("cmdk", () => {
 
 describe("EditorCommand", () => {
   it("updates query and range atoms via EditorCommandOut", () => {
-    const tunnel = {
-      In: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-      Out: () => <div data-testid="tunnel-out" />,
-    };
+    const setPortalContainer = vi.fn();
 
     const commandEl = document.createElement("div");
     commandEl.id = "slash-command";
@@ -49,14 +46,15 @@ describe("EditorCommand", () => {
     document.body.appendChild(commandEl);
 
     render(
-      <EditorCommandTunnelContext.Provider value={tunnel as never}>
+      <EditorCommandPortalContext.Provider value={{ portalContainer: null, setPortalContainer }}>
         <EditorCommandOut query="hello" range={{ from: 1, to: 2 }} />
-      </EditorCommandTunnelContext.Provider>,
+      </EditorCommandPortalContext.Provider>,
     );
 
     expect(novelStore.get(queryAtom)).toBe("hello");
     expect(novelStore.get(rangeAtom)).toEqual({ from: 1, to: 2 });
-    expect(screen.getByTestId("tunnel-out")).toBeInTheDocument();
+    // The container ref callback should have been called
+    expect(setPortalContainer).toHaveBeenCalled();
 
     const event = new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true });
     const preventDefault = vi.fn();
@@ -67,18 +65,16 @@ describe("EditorCommand", () => {
     commandEl.remove();
   });
 
-  it("renders command input", () => {
-    const tunnel = {
-      In: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-      Out: () => <div />,
-    };
+  it("renders command input via portal when container is available", () => {
+    const portalContainer = document.createElement("div");
+    document.body.appendChild(portalContainer);
 
     render(
-      <EditorCommandTunnelContext.Provider value={tunnel as never}>
+      <EditorCommandPortalContext.Provider value={{ portalContainer, setPortalContainer: vi.fn() }}>
         <EditorCommand>
           <div>Child</div>
         </EditorCommand>
-      </EditorCommandTunnelContext.Provider>,
+      </EditorCommandPortalContext.Provider>,
     );
 
     expect(screen.getByTestId("cmdk")).toBeInTheDocument();
@@ -89,5 +85,20 @@ describe("EditorCommand", () => {
       stopPropagation,
     } as KeyboardEvent);
     expect(stopPropagation).toHaveBeenCalled();
+
+    portalContainer.remove();
+  });
+
+  it("renders nothing when portal container is not available", () => {
+    const { container } = render(
+      <EditorCommandPortalContext.Provider value={{ portalContainer: null, setPortalContainer: vi.fn() }}>
+        <EditorCommand>
+          <div data-testid="child">Child</div>
+        </EditorCommand>
+      </EditorCommandPortalContext.Provider>,
+    );
+
+    expect(container.innerHTML).toBe("");
+    expect(screen.queryByTestId("child")).not.toBeInTheDocument();
   });
 });

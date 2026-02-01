@@ -4,7 +4,7 @@ import { Command, CommandInput } from "~/components/tailwind/ui/command";
 
 import { useCompletion } from "@ai-sdk/react";
 import { ArrowUp } from "lucide-react";
-import { addAIHighlight, getSelectionText, useEditor } from "@vectorfy/novel/client";
+import { addAIHighlight, getSelectionText, useEditor } from "@vectorfyco/novel-v3/client";
 import { useState } from "react";
 import Markdown from "react-markdown";
 import { toast } from "sonner";

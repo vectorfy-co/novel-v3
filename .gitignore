@@ -23,7 +23,6 @@ packages/*/build/
 .DS_Store
 *.pem
 .upstream
-.husky
 .history
 # debug
 .pnpm-debug.log*

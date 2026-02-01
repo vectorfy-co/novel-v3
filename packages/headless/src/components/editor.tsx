@@ -1,11 +1,10 @@
 import { EditorProvider } from "@tiptap/react";
 import type { EditorProviderProps, JSONContent } from "@tiptap/react";
 import { Provider } from "jotai";
-import { forwardRef, useRef } from "react";
+import { forwardRef } from "react";
 import type { FC, ReactNode } from "react";
-import tunnel from "tunnel-rat";
 import { novelStore } from "../utils/store";
-import { EditorCommandTunnelContext } from "./editor-command";
+import { EditorCommandPortalContext, useEditorCommandPortal } from "./editor-command";
 
 export interface EditorProps {
   readonly children: ReactNode;
@@ -17,11 +16,11 @@ interface EditorRootProps {
 }
 
 export const EditorRoot: FC<EditorRootProps> = ({ children }) => {
-  const tunnelInstance = useRef(tunnel()).current;
+  const portalContext = useEditorCommandPortal();
 
   return (
     <Provider store={novelStore}>
-      <EditorCommandTunnelContext.Provider value={tunnelInstance}>{children}</EditorCommandTunnelContext.Provider>
+      <EditorCommandPortalContext.Provider value={portalContext}>{children}</EditorCommandPortalContext.Provider>
     </Provider>
   );
 };

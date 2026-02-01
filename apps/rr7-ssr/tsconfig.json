@@ -7,10 +7,10 @@
     "rootDirs": [".", ".react-router/types"],
     "paths": {
       "~/*": ["./app/*"],
-      "@vectorfy/novel": ["../../packages/headless/src/index.ts"],
-      "@vectorfy/novel/client": ["../../packages/headless/src/client/index.ts"],
-      "@vectorfy/novel/client/core": ["../../packages/headless/src/client/core.ts"],
-      "@vectorfy/novel/server": ["../../packages/headless/src/server/index.ts"]
+      "@vectorfyco/novel-v3": ["../../packages/headless/src/index.ts"],
+      "@vectorfyco/novel-v3/client": ["../../packages/headless/src/client/index.ts"],
+      "@vectorfyco/novel-v3/client/core": ["../../packages/headless/src/client/core.ts"],
+      "@vectorfyco/novel-v3/server": ["../../packages/headless/src/server/index.ts"]
     }
   },
   "include": ["app", "react-router.config.ts", ".react-router/types/**/*"]

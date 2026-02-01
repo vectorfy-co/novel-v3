@@ -1,5 +1,5 @@
 import { CommandGroup, CommandItem, CommandSeparator } from "../ui/command";
-import { useEditor } from "@vectorfy/novel/client";
+import { useEditor } from "@vectorfyco/novel-v3/client";
 import { Check, TextQuote, TrashIcon } from "lucide-react";
 
 const AICompletionCommands = ({

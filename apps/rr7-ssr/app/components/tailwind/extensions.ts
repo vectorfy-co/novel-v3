@@ -21,7 +21,7 @@ import {
   UpdatedImage,
   UploadImagesPlugin,
   Youtube,
-} from "@vectorfy/novel/client";
+} from "@vectorfyco/novel-v3/client";
 
 import { cx } from "class-variance-authority";
 import { common, createLowlight } from "lowlight";

@@ -1,5 +1,5 @@
 {
-  "name": "@vectorfy/novel",
+  "name": "@vectorfyco/novel-v3",
   "version": "1.0.0",
   "description": "Notion-style WYSIWYG editor with AI-powered autocompletions",
   "license": "Apache-2.0",
@@ -79,8 +79,7 @@
     "react-markdown": "^10.1.0",
     "react-moveable": "^0.56.0",
     "react-tweet": "^3.3.0",
-    "tiptap-extension-global-drag-handle": "^0.1.18",
-    "tunnel-rat": "^0.1.2"
+    "tiptap-extension-global-drag-handle": "^0.1.18"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.11",

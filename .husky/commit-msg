@@ -1,1 +1,2 @@
+# Validate commit message format
 pnpm commitlint --edit $1

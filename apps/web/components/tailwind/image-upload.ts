@@ -1,4 +1,4 @@
-import { createImageUpload } from "@vectorfy/novel/client";
+import { createImageUpload } from "@vectorfyco/novel-v3/client";
 import { toast } from "sonner";
 
 const onUpload = (file: File) => {

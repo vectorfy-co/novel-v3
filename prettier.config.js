@@ -1,3 +1,4 @@
+// Prettier configuration for novel-v3
 module.exports = {
   bracketSpacing: true,
   semi: true,

@@ -2,13 +2,11 @@
 
 ## Supported Versions
 
-We release patches for security vulnerabilities. 
-
+We release patches for security vulnerabilities.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.2.x   | :white_check_mark: |
-| 0.1.x   | :x:                |
+| 1.x.x   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 

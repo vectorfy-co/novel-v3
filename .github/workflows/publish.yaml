@@ -13,6 +13,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: npm-publish
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,7 +40,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build package
-        run: pnpm --filter @vectorfy/novel build
+        run: pnpm --filter @vectorfyco/novel-v3 build
 
       - name: Publish to npm
         run: npm publish --access public --provenance

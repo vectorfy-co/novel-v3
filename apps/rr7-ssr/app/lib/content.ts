@@ -64,7 +64,7 @@ export const defaultEditorContent = {
     {
       type: "codeBlock",
       attrs: { language: null },
-      content: [{ type: "text", text: "npm i @vectorfy/novel" }],
+      content: [{ type: "text", text: "npm i @vectorfyco/novel-v3" }],
     },
     {
       type: "heading",
@@ -77,7 +77,7 @@ export const defaultEditorContent = {
       content: [
         {
           type: "text",
-          text: 'import { Editor } from "@vectorfy/novel";\n\nexport default function App() {\n  return (\n     <Editor />\n  )\n}',
+          text: 'import { Editor } from "@vectorfyco/novel-v3";\n\nexport default function App() {\n  return (\n     <Editor />\n  )\n}',
         },
       ],
     },
@@ -314,7 +314,7 @@ export const defaultEditorContent = {
                     {
                       type: "link",
                       attrs: {
-                        href: "https://www.npmjs.com/package/@vectorfy/novel",
+                        href: "https://www.npmjs.com/package/@vectorfyco/novel-v3",
                         target: "_blank",
                       },
                     },

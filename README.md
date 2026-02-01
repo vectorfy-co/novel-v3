@@ -63,16 +63,16 @@ and reference apps for Next.js App Router and React Router v7 SSR.
 <a id="install"></a>
 ## ![Install](https://img.shields.io/badge/Install-npm%20package-0EA5E9?style=for-the-badge&logo=npm&logoColor=white)
 
-Published package name: `@vectorfy/novel`
+Published package name: `@vectorfyco/novel-v3`
 
 ```bash
-pnpm add @vectorfy/novel
+pnpm add @vectorfyco/novel-v3
 # or
-npm install @vectorfy/novel
+npm install @vectorfyco/novel-v3
 # or
-yarn add @vectorfy/novel
+yarn add @vectorfyco/novel-v3
 # or
-bun add @vectorfy/novel
+bun add @vectorfyco/novel-v3
 ```
 
 <a id="nextjs"></a>
@@ -83,7 +83,7 @@ Minimal client editor (App Router):
 ```tsx
 "use client";
 
-import { EditorRoot, EditorContent, StarterKit, type JSONContent } from "@vectorfy/novel/client";
+import { EditorRoot, EditorContent, StarterKit, type JSONContent } from "@vectorfyco/novel-v3/client";
 
 const content: JSONContent = {
   type: "doc",
@@ -136,7 +136,7 @@ export default function IndexRoute() {
 SSR rendering on the server:
 
 ```ts
-import { renderToHTMLString, renderToMarkdown, serverExtensions, type JSONContent } from "@vectorfy/novel/server";
+import { renderToHTMLString, renderToMarkdown, serverExtensions, type JSONContent } from "@vectorfyco/novel-v3/server";
 
 const content: JSONContent = {
   type: "doc",
@@ -166,7 +166,7 @@ apps/
   web/        Next.js App Router demo
   rr7-ssr/    React Router v7 SSR demo (Express adapter)
 packages/
-  headless/   @vectorfy/novel library (client + server entry points)
+  headless/   @vectorfyco/novel-v3 library (client + server entry points)
   tsconfig/   Shared TypeScript config
 ```
 
@@ -174,10 +174,10 @@ packages/
 
 | Entry Point | Purpose |
 | --- | --- |
-| `@vectorfy/novel` | Client bundle (re-exports the client API). |
-| `@vectorfy/novel/client` | Full client API: components, extensions, plugins, utils. |
-| `@vectorfy/novel/client/core` | UI components only (smaller client bundle). |
-| `@vectorfy/novel/server` | Static rendering and SSR-safe editor creation. |
+| `@vectorfyco/novel-v3` | Client bundle (re-exports the client API). |
+| `@vectorfyco/novel-v3/client` | Full client API: components, extensions, plugins, utils. |
+| `@vectorfyco/novel-v3/client/core` | UI components only (smaller client bundle). |
+| `@vectorfyco/novel-v3/server` | Static rendering and SSR-safe editor creation. |
 
 <a id="configuration"></a>
 ## ![Configuration](https://img.shields.io/badge/Configuration-Env%20Vars-0EA5E9?style=for-the-badge&logo=zod&logoColor=white)
@@ -211,7 +211,7 @@ packages/
 
 - CI workflow runs on PRs and main pushes: install, lint, typecheck, format, build, Playwright install, then unit + E2E tests.
 - Release bump workflow runs after a successful main CI run and uses `scripts/release_novel.py` to bump, tag, and push when relevant changes exist.
-- Publish workflow triggers on `v*` tags and publishes `@vectorfy/novel` to npm with provenance.
+- Publish workflow triggers on `v*` tags and publishes `@vectorfyco/novel-v3` to npm with provenance.
 - The release path filter is scoped to `packages/headless` sources and build configs.
 
 ## ![Auth](https://img.shields.io/badge/Auth%20%26%20Routes-None-2563EB?style=for-the-badge&logo=auth0&logoColor=white)
@@ -254,8 +254,8 @@ pnpm -w test
 Package and app-specific commands:
 
 ```bash
-pnpm --filter @vectorfy/novel test
-pnpm --filter @vectorfy/novel build
+pnpm --filter @vectorfyco/novel-v3 test
+pnpm --filter @vectorfyco/novel-v3 build
 pnpm --filter novel-next-app test:e2e
 pnpm --filter novel-next-app test:e2e:install
 ```

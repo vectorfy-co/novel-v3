@@ -1,5 +1,5 @@
 import { Check, ChevronDown } from "lucide-react";
-import { EditorBubbleItem, useEditor } from "@vectorfy/novel/client";
+import { EditorBubbleItem, useEditor } from "@vectorfyco/novel-v3/client";
 
 import { Button } from "@/components/tailwind/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/tailwind/ui/popover";

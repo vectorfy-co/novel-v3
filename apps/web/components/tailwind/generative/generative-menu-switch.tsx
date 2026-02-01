@@ -1,4 +1,4 @@
-import { EditorBubble, removeAIHighlight, useEditor } from "@vectorfy/novel/client";
+import { EditorBubble, removeAIHighlight, useEditor } from "@vectorfyco/novel-v3/client";
 import { Fragment, type ReactNode, useEffect } from "react";
 import { Button } from "../ui/button";
 import Magic from "../ui/icons/magic";
