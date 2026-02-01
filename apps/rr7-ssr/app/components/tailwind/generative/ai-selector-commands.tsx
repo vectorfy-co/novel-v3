@@ -1,5 +1,5 @@
-import { ArrowDownWideNarrow, CheckCheck, RefreshCcwDot, StepForward, WrapText } from "lucide-react";
 import { getPrevText, getSelectionText, useEditor } from "@vectorfyco/novel-v3/client";
+import { ArrowDownWideNarrow, CheckCheck, RefreshCcwDot, StepForward, WrapText } from "lucide-react";
 import { CommandGroup, CommandItem, CommandSeparator } from "../ui/command";
 
 const options = [

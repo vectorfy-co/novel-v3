@@ -1,19 +1,17 @@
-
-
-import { Command, CommandInput } from "~/components/tailwind/ui/command";
-
 import { useCompletion } from "@ai-sdk/react";
-import { ArrowUp } from "lucide-react";
 import { addAIHighlight, getSelectionText, useEditor } from "@vectorfyco/novel-v3/client";
+import { ArrowUp } from "lucide-react";
 import { useState } from "react";
 import Markdown from "react-markdown";
 import { toast } from "sonner";
+import { Command, CommandInput } from "~/components/tailwind/ui/command";
 import { Button } from "../ui/button";
 import CrazySpinner from "../ui/icons/crazy-spinner";
 import Magic from "../ui/icons/magic";
 import { ScrollArea } from "../ui/scroll-area";
 import AICompletionCommands from "./ai-completion-command";
 import AISelectorCommands from "./ai-selector-commands";
+
 //TODO: I think it makes more sense to create a custom Tiptap extension for this functionality https://tiptap.dev/docs/editor/ai/introduction
 
 interface AISelectorProps {

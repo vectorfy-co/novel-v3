@@ -1,3 +1,5 @@
+import { Popover } from "@radix-ui/react-popover";
+import { EditorBubbleItem, useEditor } from "@vectorfyco/novel-v3/client";
 import {
   Check,
   CheckSquare,
@@ -11,11 +13,8 @@ import {
   TextIcon,
   TextQuote,
 } from "lucide-react";
-import { EditorBubbleItem, useEditor } from "@vectorfyco/novel-v3/client";
-
 import { Button } from "~/components/tailwind/ui/button";
 import { PopoverContent, PopoverTrigger } from "~/components/tailwind/ui/popover";
-import { Popover } from "@radix-ui/react-popover";
 
 export type SelectorItem = {
   name: string;

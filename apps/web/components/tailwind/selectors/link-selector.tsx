@@ -1,10 +1,10 @@
+import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
+import { useEditor } from "@vectorfyco/novel-v3/client";
+import { Check, Trash } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/tailwind/ui/button";
 import { PopoverContent } from "@/components/tailwind/ui/popover";
 import { cn } from "@/lib/utils";
-import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
-import { Check, Trash } from "lucide-react";
-import { useEditor } from "@vectorfyco/novel-v3/client";
-import { useEffect, useRef } from "react";
 
 export function isValidUrl(url: string) {
   try {
