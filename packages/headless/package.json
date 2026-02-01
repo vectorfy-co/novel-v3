@@ -98,13 +98,13 @@
     "vitest": "^3.2.4"
   },
   "author": "Andrew M",
-  "homepage": "https://github.com/andrewmaspero/novel-v3",
+  "homepage": "https://github.com/vectorfy-co/novel-v3",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andrewmaspero/novel-v3.git"
+    "url": "git+https://github.com/vectorfy-co/novel-v3.git"
   },
   "bugs": {
-    "url": "https://github.com/andrewmaspero/novel-v3/issues"
+    "url": "https://github.com/vectorfy-co/novel-v3/issues"
   },
   "keywords": [
     "ai",
