@@ -1,6 +1,6 @@
 {
   "name": "@vectorfyco/novel-v3",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Notion-style WYSIWYG editor with AI-powered autocompletions",
   "license": "Apache-2.0",
   "type": "module",
