@@ -3,7 +3,7 @@
     "changelog": [
         "@changesets/changelog-github",
         {
-            "repo": "andrewmaspero/novel-v3"
+            "repo": "vectorfy-co/novel-v3"
         }
     ],
     "commit": false,
