@@ -1,20 +1,11 @@
 name: Publish
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
     inputs:
       tag:
         description: "Tag to publish (e.g. v2.0.1). Defaults to current ref."
         required: false
-        type: string
-  workflow_call:
-    inputs:
-      tag:
-        description: "Tag to publish"
-        required: true
         type: string
 
 permissions:

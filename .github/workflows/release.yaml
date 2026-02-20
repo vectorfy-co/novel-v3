@@ -5,6 +5,12 @@ on:
     workflows: ["CI"]
     types:
       - completed
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to publish via OIDC (e.g. v2.0.1)"
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -80,7 +86,86 @@ jobs:
   publish:
     needs: bump
     if: needs.bump.outputs.release == 'true'
-    uses: ./.github/workflows/publish.yaml
-    with:
-      tag: v${{ needs.bump.outputs.version }}
-    secrets: inherit
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: v${{ needs.bump.outputs.version }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+          registry-url: https://registry.npmjs.org/
+
+      - name: Update npm
+        run: npm install -g npm@11.5.1
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build package
+        run: pnpm --filter @vectorfyco/novel-v3 build
+
+      - name: Publish to npm (OIDC trusted publishing)
+        run: npm publish --access public --provenance
+        working-directory: packages/headless
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          tag_name: v${{ needs.bump.outputs.version }}
+
+  publish_existing_tag:
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.tag != ''
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.tag }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+          registry-url: https://registry.npmjs.org/
+
+      - name: Update npm
+        run: npm install -g npm@11.5.1
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build package
+        run: pnpm --filter @vectorfyco/novel-v3 build
+
+      - name: Publish to npm (OIDC trusted publishing)
+        run: npm publish --access public --provenance
+        working-directory: packages/headless
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          tag_name: ${{ github.event.inputs.tag }}
