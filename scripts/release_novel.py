@@ -218,6 +218,7 @@ def main() -> None:
             f"chore(release): bump {package_name} to {new_version} [skip ci]",
         )
 
+    tag_name: str | None = None
     if args.tag:
         tag_name = f"{tag_prefix}{new_version}"
         if tag_exists(tag_name):
@@ -226,7 +227,10 @@ def main() -> None:
             git("tag", tag_name)
 
     if args.push:
-        git("push", "--atomic", "origin", "HEAD:main", "--tags")
+        push_cmd = ["push", "--atomic", "origin", "HEAD:main"]
+        if tag_name:
+            push_cmd.append(f"refs/tags/{tag_name}")
+        git(*push_cmd)
 
 
 if __name__ == "__main__":
