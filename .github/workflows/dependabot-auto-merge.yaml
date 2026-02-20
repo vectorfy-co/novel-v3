@@ -20,7 +20,24 @@ jobs:
 
       - name: Auto-merge minor and patch updates
         if: steps.metadata.outputs.update-type != 'version-update:semver-major'
-        run: gh pr merge --auto --squash "$PR_URL"
+        run: |
+          set +e
+          output=$(gh pr merge --auto --squash "$PR_URL" 2>&1)
+          status=$?
+          set -e
+
+          echo "$output"
+
+          if [ $status -eq 0 ]; then
+            exit 0
+          fi
+
+          if echo "$output" | grep -q "Pull request Auto merge is not allowed for this repository"; then
+            echo "Auto-merge is disabled in repository settings; skipping without failing."
+            exit 0
+          fi
+
+          exit $status
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

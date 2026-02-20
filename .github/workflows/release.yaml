@@ -54,7 +54,25 @@ jobs:
         env:
           RELEASE_PATHS: packages/headless/src,packages/headless/package.json,packages/headless/tsup.config.ts,packages/headless/tsconfig.json,packages/headless/biome.json,pnpm-lock.yaml
         run: |
-          uv run --python 3.12 scripts/release_novel.py --commit --tag --push
+          set +e
+          output=$(uv run --python 3.12 scripts/release_novel.py --commit --tag --push 2>&1)
+          status=$?
+          set -e
+
+          echo "$output"
+
+          if [ $status -eq 0 ]; then
+            exit 0
+          fi
+
+          if echo "$output" | grep -q "GH013: Repository rule violations found for refs/heads/main"; then
+            echo "Repository rules block direct pushes to main; skipping automated release bump."
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            echo "version=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          exit $status
     outputs:
       release: ${{ steps.release.outputs.release }}
       version: ${{ steps.release.outputs.version }}

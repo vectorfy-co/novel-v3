@@ -188,6 +188,11 @@ def main() -> None:
 
     if bump_needed:
         new_version = bump_patch(current_version)
+        while tag_exists(f"{tag_prefix}{new_version}"):
+            print(
+                f"Tag {tag_prefix}{new_version} already exists, trying next patch version."
+            )
+            new_version = bump_patch(new_version)
         print(f"Bumping version {current_version} -> {new_version}")
         if not args.dry_run:
             package_data["version"] = new_version
@@ -221,7 +226,7 @@ def main() -> None:
             git("tag", tag_name)
 
     if args.push:
-        git("push", "origin", "HEAD:main", "--tags")
+        git("push", "--atomic", "origin", "HEAD:main", "--tags")
 
 
 if __name__ == "__main__":
