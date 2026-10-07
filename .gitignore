@@ -67,3 +67,6 @@ packages/*/coverage/
 # tanstack start
 .tanstack/
 apps/*/.tanstack/
+
+# local review evidence
+.codex-artifacts/
