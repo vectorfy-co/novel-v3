@@ -2,3 +2,7 @@
 packages:
   - "apps/*"
   - "packages/*"
+onlyBuiltDependencies:
+  - esbuild
+patchedDependencies:
+  "@daybrush/utils@1.13.0": patches/@daybrush__utils@1.13.0.patch

@@ -11,7 +11,7 @@
     "format:fix": "turbo format --continue -- --write",
     "lint": "turbo lint --continue --",
     "lint:fix": "turbo lint --continue -- --apply",
-    "test": "pnpm -r test --if-present",
+    "test": "pnpm -r --if-present test",
     "ci:test": "pnpm -w test && pnpm --filter novel-next-app test:e2e",
     "clean": "turbo clean",
     "release": "turbo run release",
@@ -19,17 +19,17 @@
     "typecheck": "turbo typecheck"
   },
   "dependencies": {
-    "@changesets/changelog-github": "^0.5.2",
-    "@changesets/cli": "^2.29.8",
-    "turbo": "^2.8.9"
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
+    "turbo": "^2.11.7"
   },
-  "packageManager": "pnpm@9.5.0",
+  "packageManager": "pnpm@10.34.6",
   "devDependencies": {
-    "@biomejs/biome": "^2.3.15",
-    "@commitlint/cli": "^20.4.1",
-    "@commitlint/config-conventional": "^20.4.1",
+    "@biomejs/biome": "^2.5.15",
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
     "husky": "^9.1.7",
-    "postcss": "^8.5.6"
+    "postcss": "^8.5.29"
   },
   "commitlint": {
     "extends": [
@@ -69,11 +69,6 @@
         "always",
         100
       ]
-    }
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@daybrush/utils@1.13.0": "patches/@daybrush__utils@1.13.0.patch"
     }
   }
 }
