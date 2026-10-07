@@ -63,13 +63,7 @@ export {
 } from "../plugins";
 
 // Utils
-export {
-  isValidUrl,
-  getUrlFromString,
-  getPrevText,
-  getAllContent,
-  getSelectionText,
-} from "../utils";
+export { isValidUrl, getUrlFromString, getPrevText, getAllContent, getSelectionText } from "../utils";
 
 // Store and Atoms
 export { queryAtom, rangeAtom } from "../utils/atoms";

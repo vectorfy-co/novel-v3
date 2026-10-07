@@ -1,7 +1,7 @@
 {
   "editor.codeActionsOnSave": {
     "source.organizeImports.biome": "explicit",
-    "source.fixAll.biome": "explicit",
+    "source.fixAll.biome": "explicit"
     // "quickfix.biome": "explicit"
   },
   "editor.defaultFormatter": "biomejs.biome",
@@ -13,10 +13,7 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules/typescript/lib",
 
-  "typescript.preferences.autoImportFileExcludePatterns": [
-    "next/router.d.ts",
-    "next/dist/client/router.d.ts"
-  ],
+  "typescript.preferences.autoImportFileExcludePatterns": ["next/router.d.ts", "next/dist/client/router.d.ts"],
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome"
   },

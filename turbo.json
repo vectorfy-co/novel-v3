@@ -1,37 +1,21 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "agentGuidance": false,
-  "globalDependencies": [
-    "**/.env.*local"
-  ],
+  "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "topo": {
-      "dependsOn": [
-        "^topo"
-      ]
+      "dependsOn": ["^topo"]
     },
     "build": {
-      "dependsOn": [
-        "^build",
-        "typecheck"
-      ],
-      "outputs": [
-        "dist/**",
-        "build/**",
-        ".next/**",
-        "!.next/cache/**"
-      ]
+      "dependsOn": ["^build", "typecheck"],
+      "outputs": ["dist/**", "build/**", ".next/**", "!.next/cache/**"]
     },
     "typecheck": {
-      "dependsOn": [
-        "^topo"
-      ],
+      "dependsOn": ["^topo"],
       "outputs": []
     },
     "lint": {
-      "dependsOn": [
-        "^topo"
-      ]
+      "dependsOn": ["^topo"]
     },
     "check-types": {},
     "dev": {

@@ -50,6 +50,7 @@ and reference apps for Next.js App Router and React Router v7 SSR.
 </div>
 
 <a id="quick-start"></a>
+
 ## ![Quick Start](https://img.shields.io/badge/Quick%20Start-5%20steps-059669?style=for-the-badge&logo=serverless&logoColor=white)
 
 1. Install dependencies: `pnpm install`
@@ -61,6 +62,7 @@ and reference apps for Next.js App Router and React Router v7 SSR.
 5. Optional: install Playwright browsers for E2E tests: `pnpm --filter novel-next-app test:e2e:install`
 
 <a id="install"></a>
+
 ## ![Install](https://img.shields.io/badge/Install-npm%20package-0EA5E9?style=for-the-badge&logo=npm&logoColor=white)
 
 Published package name: `@vectorfyco/novel-v3`
@@ -76,6 +78,7 @@ bun add @vectorfyco/novel-v3
 ```
 
 <a id="nextjs"></a>
+
 ## ![Next.js](https://img.shields.io/badge/Next.js-Getting%20Started-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 
 Minimal client editor (App Router):
@@ -112,6 +115,7 @@ export default function Page() {
 ```
 
 <a id="react-router-ssr"></a>
+
 ## ![React Router](https://img.shields.io/badge/React%20Router-Getting%20Started-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 
 React Router v7 SSR route with a client-only editor:
@@ -125,11 +129,7 @@ export default function IndexRoute() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  return (
-    <Suspense fallback={<div>Loading editor...</div>}>
-      {mounted ? <ClientEditor /> : null}
-    </Suspense>
-  );
+  return <Suspense fallback={<div>Loading editor...</div>}>{mounted ? <ClientEditor /> : null}</Suspense>;
 }
 ```
 
@@ -148,16 +148,17 @@ const markdown = renderToMarkdown({ content, extensions: serverExtensions });
 ```
 
 <a id="features"></a>
+
 ## ![Features](https://img.shields.io/badge/Features-Highlights-7C3AED?style=for-the-badge&logo=simpleicons&logoColor=white)
 
-| Feature Badge | Details |
-| --- | --- |
-| ![Editor](https://img.shields.io/badge/Editor-TipTap%20v3-111827?style=flat&logo=markdown&logoColor=white) | Rich-text editor with custom extensions, slash command UI, bubble menus, and drag handles. |
-| ![AI](https://img.shields.io/badge/AI-Assist-2563EB?style=flat&logo=vercel&logoColor=white) | Streaming AI rewrite/continue/shorten/lengthen/fix/zap flows backed by Vercel AI SDK. |
-| ![SSR](https://img.shields.io/badge/SSR-Static%20Render-0F766E?style=flat&logo=nextdotjs&logoColor=white) | Server-safe HTML and Markdown rendering via `@tiptap/static-renderer`. |
-| ![Uploads](https://img.shields.io/badge/Uploads-Image%20Paste-22C55E?style=flat&logo=cloudflare&logoColor=white) | Drag/drop and clipboard image uploads with placeholders and local fallback. |
-| ![Apps](https://img.shields.io/badge/Apps-Next%20%2B%20RR7-CA4245?style=flat&logo=reactrouter&logoColor=white) | Reference apps for Next.js App Router and React Router v7 SSR. |
-| ![Testing](https://img.shields.io/badge/Testing-Playwright-7C3AED?style=flat&logo=testinglibrary&logoColor=white) | E2E coverage for editor flows, slash commands, uploads, and theme switching. |
+| Feature Badge                                                                                                     | Details                                                                                    |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| ![Editor](https://img.shields.io/badge/Editor-TipTap%20v3-111827?style=flat&logo=markdown&logoColor=white)        | Rich-text editor with custom extensions, slash command UI, bubble menus, and drag handles. |
+| ![AI](https://img.shields.io/badge/AI-Assist-2563EB?style=flat&logo=vercel&logoColor=white)                       | Streaming AI rewrite/continue/shorten/lengthen/fix/zap flows backed by Vercel AI SDK.      |
+| ![SSR](https://img.shields.io/badge/SSR-Static%20Render-0F766E?style=flat&logo=nextdotjs&logoColor=white)         | Server-safe HTML and Markdown rendering via `@tiptap/static-renderer`.                     |
+| ![Uploads](https://img.shields.io/badge/Uploads-Image%20Paste-22C55E?style=flat&logo=cloudflare&logoColor=white)  | Drag/drop and clipboard image uploads with placeholders and local fallback.                |
+| ![Apps](https://img.shields.io/badge/Apps-Next%20%2B%20RR7-CA4245?style=flat&logo=reactrouter&logoColor=white)    | Reference apps for Next.js App Router and React Router v7 SSR.                             |
+| ![Testing](https://img.shields.io/badge/Testing-Playwright-7C3AED?style=flat&logo=testinglibrary&logoColor=white) | E2E coverage for editor flows, slash commands, uploads, and theme switching.               |
 
 ## ![Repository Layout](https://img.shields.io/badge/Repository-Layout-6366F1?style=for-the-badge&logo=git&logoColor=white)
 
@@ -172,41 +173,43 @@ packages/
 
 ## ![Packages](https://img.shields.io/badge/Packages-Entry%20Points-0EA5E9?style=for-the-badge&logo=npm&logoColor=white)
 
-| Entry Point | Purpose |
-| --- | --- |
-| `@vectorfyco/novel-v3` | Client bundle (re-exports the client API). |
-| `@vectorfyco/novel-v3/client` | Full client API: components, extensions, plugins, utils. |
-| `@vectorfyco/novel-v3/client/core` | UI components only (smaller client bundle). |
-| `@vectorfyco/novel-v3/server` | Static rendering and SSR-safe editor creation. |
+| Entry Point                        | Purpose                                                  |
+| ---------------------------------- | -------------------------------------------------------- |
+| `@vectorfyco/novel-v3`             | Client bundle (re-exports the client API).               |
+| `@vectorfyco/novel-v3/client`      | Full client API: components, extensions, plugins, utils. |
+| `@vectorfyco/novel-v3/client/core` | UI components only (smaller client bundle).              |
+| `@vectorfyco/novel-v3/server`      | Static rendering and SSR-safe editor creation.           |
 
 <a id="configuration"></a>
+
 ## ![Configuration](https://img.shields.io/badge/Configuration-Env%20Vars-0EA5E9?style=for-the-badge&logo=zod&logoColor=white)
 
 ### ![Next.js Env](https://img.shields.io/badge/Next.js-env%20vars-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 
-| Name | Required | Default | Format | Description |
-| --- | --- | --- | --- | --- |
-| OPENAI_API_KEY | yes | - | string | OpenAI API key for `/api/generate` streaming responses. |
-| OPENAI_BASE_URL | no | https://api.openai.com/v1 | URL | Optional OpenAI-compatible base URL override. |
-| BLOB_READ_WRITE_TOKEN | no | - | string | Vercel Blob token for `/api/upload` image storage. |
-| KV_REST_API_URL | no | - | URL | Upstash Redis REST URL enabling per-IP rate limiting. |
-| KV_REST_API_TOKEN | no | - | string | Upstash Redis REST token enabling per-IP rate limiting. |
+| Name                  | Required | Default                   | Format | Description                                             |
+| --------------------- | -------- | ------------------------- | ------ | ------------------------------------------------------- |
+| OPENAI_API_KEY        | yes      | -                         | string | OpenAI API key for `/api/generate` streaming responses. |
+| OPENAI_BASE_URL       | no       | https://api.openai.com/v1 | URL    | Optional OpenAI-compatible base URL override.           |
+| BLOB_READ_WRITE_TOKEN | no       | -                         | string | Vercel Blob token for `/api/upload` image storage.      |
+| KV_REST_API_URL       | no       | -                         | URL    | Upstash Redis REST URL enabling per-IP rate limiting.   |
+| KV_REST_API_TOKEN     | no       | -                         | string | Upstash Redis REST token enabling per-IP rate limiting. |
 
 ### ![RR7 Env](https://img.shields.io/badge/RR7%20SSR-env%20vars-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white)
 
-| Name | Required | Default | Format | Description |
-| --- | --- | --- | --- | --- |
-| OPENAI_API_KEY | yes | - | string | OpenAI API key for `/api/generate` in the RR7 app. |
-| PORT | no | 3000 | number | Express server port for the SSR build. |
+| Name           | Required | Default | Format | Description                                        |
+| -------------- | -------- | ------- | ------ | -------------------------------------------------- |
+| OPENAI_API_KEY | yes      | -       | string | OpenAI API key for `/api/generate` in the RR7 app. |
+| PORT           | no       | 3000    | number | Express server port for the SSR build.             |
 
 ### ![Playwright Env](https://img.shields.io/badge/Playwright-env%20vars-7C3AED?style=for-the-badge&logo=testinglibrary&logoColor=white)
 
-| Name | Required | Default | Format | Description |
-| --- | --- | --- | --- | --- |
-| PLAYWRIGHT_PORT | no | 3000 | number | Port for the Next.js dev server used in E2E tests. |
-| CI | no | - | string | When set, Playwright runs with a single worker. |
+| Name            | Required | Default | Format | Description                                        |
+| --------------- | -------- | ------- | ------ | -------------------------------------------------- |
+| PLAYWRIGHT_PORT | no       | 3000    | number | Port for the Next.js dev server used in E2E tests. |
+| CI              | no       | -       | string | When set, Playwright runs with a single worker.    |
 
 <a id="ci-cd"></a>
+
 ## ![CI/CD](https://img.shields.io/badge/CI%2FCD-Overview-1F4B99?style=for-the-badge&logo=githubactions&logoColor=white)
 
 - CI workflow runs on PRs and main pushes: install, lint, typecheck, format, build, Playwright install, then unit + E2E tests.
@@ -261,6 +264,7 @@ pnpm --filter novel-next-app test:e2e:install
 ```
 
 <a id="production"></a>
+
 ## ![Production](https://img.shields.io/badge/Production-Readiness-0F766E?style=for-the-badge&logo=serverless&logoColor=white)
 
 - Set `OPENAI_API_KEY` for any AI-assisted functionality.
@@ -269,6 +273,7 @@ pnpm --filter novel-next-app test:e2e:install
 - Confirm CI passes on main and tags are pushed before publish.
 
 <a id="architecture"></a>
+
 ## ![Architecture](https://img.shields.io/badge/Architecture-Stack%20map-1F2937?style=for-the-badge&logo=planetscale&logoColor=white)
 
 - `packages/headless` bundles the editor UI and extensions for the client and exports SSR-safe rendering helpers.
@@ -284,6 +289,7 @@ pnpm --filter novel-next-app test:e2e:install
 - Playwright failures: run `pnpm --filter novel-next-app test:e2e:install` and set `PLAYWRIGHT_PORT` if 3000 is busy.
 
 <a id="credits"></a>
+
 ## ![Credits](https://img.shields.io/badge/Credits-Attribution-0F172A?style=for-the-badge&logo=github&logoColor=white)
 
 Rectify walked off the original Novel foundation and rebuilt the project with a new monorepo layout,

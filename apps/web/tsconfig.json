@@ -7,30 +7,13 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@vectorfyco/novel-v3": [
-        "../../packages/headless/src/index.ts"
-      ],
-      "@vectorfyco/novel-v3/client": [
-        "../../packages/headless/src/client/index.ts"
-      ],
-      "@vectorfyco/novel-v3/client/core": [
-        "../../packages/headless/src/client/core.ts"
-      ],
-      "@vectorfyco/novel-v3/server": [
-        "../../packages/headless/src/server/index.ts"
-      ]
+      "@/*": ["./*"],
+      "@vectorfyco/novel-v3": ["../../packages/headless/src/index.ts"],
+      "@vectorfyco/novel-v3/client": ["../../packages/headless/src/client/index.ts"],
+      "@vectorfyco/novel-v3/client/core": ["../../packages/headless/src/client/core.ts"],
+      "@vectorfyco/novel-v3/server": ["../../packages/headless/src/server/index.ts"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

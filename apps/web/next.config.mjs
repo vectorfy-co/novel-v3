@@ -29,8 +29,7 @@ const nextConfig = {
       },
       {
         source: "/vscode",
-        destination:
-          "https://marketplace.visualstudio.com/items?itemName=bennykok.novel-vscode",
+        destination: "https://marketplace.visualstudio.com/items?itemName=bennykok.novel-vscode",
         permanent: false,
       },
       {
