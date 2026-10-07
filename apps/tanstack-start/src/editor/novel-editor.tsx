@@ -8,6 +8,7 @@ import {
   type EditorInstance,
   EditorRoot,
   handleCommandNavigation,
+  getAllContent,
   type JSONContent,
 } from "@vectorfyco/novel-v3/client";
 import { useEffect, useState, useSyncExternalStore } from "react";
@@ -48,7 +49,7 @@ interface EditorOutputs {
 
 const readOutputs = (editor: EditorInstance): EditorOutputs => ({
   json: JSON.stringify(editor.getJSON(), null, 2),
-  markdown: editor.getMarkdown(),
+  markdown: getAllContent(editor),
   html: editor.getHTML(),
 });
 

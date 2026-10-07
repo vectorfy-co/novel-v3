@@ -30,6 +30,24 @@ type HorizontalRuleExtension = {
 };
 
 describe("extensions bundles", () => {
+  it.each([[clientExtensions], [serverExtensions]])("registers each extension once", (extensions) => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const editor = new Editor({ element: null, extensions, content: "" });
+    try {
+      const names = editor.extensionManager.extensions.map((extension) => extension.name);
+      expect(names.filter((name) => name === "horizontalRule")).toHaveLength(1);
+      expect(names.filter((name) => name === "codeBlock")).toHaveLength(1);
+      expect(names.filter((name) => name === "image")).toHaveLength(1);
+      expect(new Set(names).size).toBe(names.length);
+      expect(warn).not.toHaveBeenCalled();
+      expect(editor.commands.setHorizontalRule()).toBe(true);
+      expect(editor.getJSON().content?.some((node) => node.type === "horizontalRule")).toBe(true);
+    } finally {
+      editor.destroy();
+      warn.mockRestore();
+    }
+  });
+
   it("includes core client extensions", () => {
     const names = clientExtensions.map((extension) => extension.name);
     expect(names).toContain("starterKit");

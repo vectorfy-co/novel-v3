@@ -1,6 +1,20 @@
 import { renderToMarkdown } from "@tiptap/static-renderer/pm/markdown";
+import type { Extensions } from "@tiptap/core";
 import { Fragment, type Node } from "@tiptap/pm/model";
 import type { EditorInstance } from "../components";
+
+// The manager already contains every child extension. The static renderer expands addExtensions
+// again, so use cached rendering copies that retain options/renderers but do not expand bundles.
+const renderingExtensions = new WeakMap<Extensions, Extensions>();
+const getRenderingExtensions = (editor: EditorInstance): Extensions => {
+  const registered = editor.extensionManager.extensions;
+  let extensions = renderingExtensions.get(registered);
+  if (!extensions) {
+    extensions = registered.map((extension) => extension.extend({ addExtensions: () => [] }));
+    renderingExtensions.set(registered, extensions);
+  }
+  return extensions;
+};
 
 export function isValidUrl(url: string) {
   try {
@@ -36,7 +50,7 @@ export const getPrevText = (editor: EditorInstance, position: number) => {
 
   return renderToMarkdown({
     content: doc,
-    extensions: editor.extensionManager.extensions,
+    extensions: getRenderingExtensions(editor),
   });
 };
 
@@ -47,7 +61,7 @@ export const getAllContent = (editor: EditorInstance) => {
 
   return renderToMarkdown({
     content: doc,
-    extensions: editor.extensionManager.extensions,
+    extensions: getRenderingExtensions(editor),
   });
 };
 
@@ -58,6 +72,6 @@ export const getSelectionText = (editor: EditorInstance) => {
 
   return renderToMarkdown({
     content: doc,
-    extensions: editor.extensionManager.extensions,
+    extensions: getRenderingExtensions(editor),
   });
 };

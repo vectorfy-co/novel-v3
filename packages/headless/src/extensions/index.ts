@@ -43,6 +43,8 @@ const MarkdownExtension = Markdown.configure({
 });
 
 const StarterKitExtension = StarterKit.configure({
+  horizontalRule: false,
+  codeBlock: false,
   link: false,
   underline: false,
 });
@@ -99,7 +101,6 @@ export const clientExtensions = [
   StarterKitExtension,
   PlaceholderExtension,
   TiptapLink,
-  TiptapImage,
   UpdatedImage,
   TaskList,
   TaskItem,
