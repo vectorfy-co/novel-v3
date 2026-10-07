@@ -1,5 +1,4 @@
 import { execFileSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import packageJsonData from "../package.json";
 import * as root from "./index";
@@ -95,7 +94,7 @@ describe("exports", () => {
       process.stdout.write(JSON.stringify({keys:modules.map((module) => Object.keys(module).sort()), html:modules[3].renderToHTMLString({content})}));
     `,
       ],
-      { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+      { cwd: process.cwd(), encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
     );
     const result = JSON.parse(output);
     expect(result.keys).toEqual([
