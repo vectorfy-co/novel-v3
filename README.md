@@ -28,7 +28,7 @@ and reference apps for Next.js App Router and React Router v7 SSR.
         <img src="https://img.shields.io/badge/React%20Router-7-CA4245?style=flat&logo=reactrouter&logoColor=white" alt="React Router" />
         <img src="https://img.shields.io/badge/Editor-TipTap%20v3-111827?style=flat&logo=markdown&logoColor=white" alt="TipTap v3" />
         <img src="https://img.shields.io/badge/Turbo-2.x-000000?style=flat&logo=turborepo&logoColor=white" alt="Turbo" />
-        <img src="https://img.shields.io/badge/pnpm-9-4A4A4A?style=flat&logo=pnpm&logoColor=white" alt="pnpm" />
+        <img src="https://img.shields.io/badge/pnpm-10-4A4A4A?style=flat&logo=pnpm&logoColor=white" alt="pnpm" />
         <img src="https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat&logo=tailwindcss&logoColor=white" alt="Tailwind" />
       </td>
     </tr>
@@ -59,6 +59,7 @@ and reference apps for Next.js App Router and React Router v7 SSR.
 4. Or run a single app:
    - Next.js: `pnpm --filter novel-next-app dev`
    - React Router SSR: `pnpm --filter novel-rr7-ssr dev`
+   - TanStack Start example (editor on TanStack Start): `pnpm --filter novel-tanstack-start dev`
 5. Optional: install Playwright browsers for E2E tests: `pnpm --filter novel-next-app test:e2e:install`
 
 <a id="install"></a>
@@ -243,23 +244,30 @@ packages/
 
 ## ![Developer Workflow](https://img.shields.io/badge/Developer-Workflow-6366F1?style=for-the-badge&logo=git&logoColor=white)
 
-Common workspace commands:
+The workspace uses pnpm 10 (pinned through `packageManager`), Turbo for task orchestration, oxlint for linting, oxfmt for formatting and Vitest for unit tests. Run every command from the repository root.
 
 ```bash
-pnpm dev
-pnpm -w lint
-pnpm -w format
-pnpm -w typecheck
-pnpm -w build
-pnpm -w test
+pnpm install        # install dependencies from pnpm-lock.yaml
+pnpm dev            # start all apps; builds @vectorfyco/novel-v3 first
+pnpm build          # build every package and app
+pnpm typecheck      # TypeScript, all packages and apps
+pnpm lint           # oxlint across packages and apps (.oxlintrc.json)
+pnpm format         # oxfmt --check (.oxfmtrc.json); use format:fix to write
+pnpm test           # Vitest: headless package and the TanStack Start example
 ```
 
-Package and app-specific commands:
+Commits run `commitlint` (commit-msg hook) and `lint-staged` (pre-commit hook), which runs oxlint and oxfmt on staged files.
+
+Package and app commands:
 
 ```bash
-pnpm --filter @vectorfyco/novel-v3 test
-pnpm --filter @vectorfyco/novel-v3 build
-pnpm --filter novel-next-app test:e2e
+pnpm --filter @vectorfyco/novel-v3 test          # Vitest, jsdom
+pnpm --filter @vectorfyco/novel-v3 test:watch    # Vitest in watch mode
+pnpm --filter @vectorfyco/novel-v3 build         # tsup bundles + tsc declarations
+pnpm --filter novel-tanstack-start dev           # TanStack Start example, http://localhost:5173
+pnpm --filter novel-tanstack-start build         # production build
+pnpm --filter novel-tanstack-start start         # serve the production build (vite preview)
+pnpm --filter novel-next-app test:e2e            # Playwright (browsers must be installed)
 pnpm --filter novel-next-app test:e2e:install
 ```
 
