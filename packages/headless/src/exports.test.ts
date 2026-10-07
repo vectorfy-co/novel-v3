@@ -1,3 +1,5 @@
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import packageJsonData from "../package.json";
 import * as root from "./index";
@@ -81,6 +83,30 @@ const SERVER_EXPORTS = ["createServerEditor", "renderToHTMLString", "renderToMar
 const sortedKeys = (namespace: object) => Object.keys(namespace).sort();
 
 describe("exports", () => {
+  it("loads all built CommonJS entries and renders on the server", () => {
+    const output = execFileSync(
+      process.execPath,
+      [
+        "-e",
+        `
+      const entries = ["@vectorfyco/novel-v3", "@vectorfyco/novel-v3/client", "@vectorfyco/novel-v3/client/core", "@vectorfyco/novel-v3/server"];
+      const modules = entries.map((entry) => require(entry));
+      const content = {type:"doc", content:[{type:"paragraph", content:[{type:"text", text:"CommonJS works"}]}]};
+      process.stdout.write(JSON.stringify({keys:modules.map((module) => Object.keys(module).sort()), html:modules[3].renderToHTMLString({content})}));
+    `,
+      ],
+      { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+    );
+    const result = JSON.parse(output);
+    expect(result.keys).toEqual([
+      [...CLIENT_EXPORTS].sort(),
+      [...CLIENT_EXPORTS].sort(),
+      [...CORE_EXPORTS].sort(),
+      [...SERVER_EXPORTS].sort(),
+    ]);
+    expect(result.html).toBe("<p>CommonJS works</p>");
+  });
+
   it("exposes client and server entry points", () => {
     expect(root).toBeTruthy();
     expect(client.EditorRoot).toBeDefined();

@@ -1,4 +1,4 @@
-import Image from "@tiptap/extension-image";
+import { Image } from "@tiptap/extension-image";
 
 const UpdatedImage = Image.extend({
   name: "image",

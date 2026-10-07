@@ -2,7 +2,7 @@ import { Extension } from "@tiptap/core";
 import type { Editor, Range } from "@tiptap/core";
 import { autoUpdate, computePosition, flip, offset, shift, type VirtualElement } from "@floating-ui/dom";
 import { ReactRenderer } from "@tiptap/react";
-import Suggestion, { type SuggestionOptions } from "@tiptap/suggestion";
+import { Suggestion, type SuggestionOptions } from "@tiptap/suggestion";
 import type { RefObject } from "react";
 import type { ReactNode } from "react";
 import { EditorCommandOut } from "../components/editor-command";
