@@ -10,7 +10,7 @@ import { EditorCommandOut } from "../components/editor-command";
 // The editor instance is supplied by the extension, so callers never pass it.
 type SlashCommandSuggestion = Omit<SuggestionOptions, "editor">;
 
-const Command = Extension.create({
+const Command: Extension = Extension.create({
   name: "slash-command",
   addOptions() {
     return {

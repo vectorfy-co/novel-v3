@@ -5,7 +5,10 @@ import * as client from "./client";
 import * as core from "./client/core";
 import * as server from "./server";
 
-type PackageExports = Record<string, { types: string; import: string; require: string }>;
+type PackageExports = Record<
+  string,
+  { import: { types: string; default: string }; require: { types: string; default: string } }
+>;
 
 const packageJson: { exports: PackageExports } = packageJsonData;
 
@@ -87,7 +90,7 @@ describe("exports", () => {
 
   it("resolves every package.json export entry to a source file", () => {
     const sourceEntries = Object.keys(packageJson.exports).map((subpath) => {
-      const distFile = packageJson.exports[subpath]?.import ?? "";
+      const distFile = packageJson.exports[subpath]?.import.default ?? "";
       return distFile.replace("./dist/", "src/").replace(/\.js$/, ".ts");
     });
 
