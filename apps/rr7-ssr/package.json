@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "react-router dev",
     "build": "react-router build",
+    "lint": "oxlint .",
     "start": "node server/app.mjs",
     "typecheck": "tsc --noEmit"
   },

@@ -25,10 +25,10 @@
   },
   "packageManager": "pnpm@10.34.6",
   "devDependencies": {
-    "@biomejs/biome": "^2.5.15",
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
     "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
     "oxfmt": "^0.72.0",
     "oxlint": "^1.87.0",
     "postcss": "^8.5.29"
@@ -72,5 +72,13 @@
         100
       ]
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "oxlint"
+    ],
+    "*.{js,jsx,ts,tsx,mjs,cjs,json,css,md,yml,yaml}": [
+      "oxfmt --no-error-on-unmatched-pattern"
+    ]
   }
 }

@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y", "import"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    // The codebase uses the automatic JSX runtime (react-jsx), so React does not need to be in scope.
+    "react/react-in-jsx-scope": "off",
+    // Editor state is hydrated from localStorage after mount to avoid server/client markup mismatches.
+    "react/set-state-in-effect": "off",
+    // The AI prompt input is mounted only after a user action and focusing it is the intended behavior.
+    "jsx-a11y/no-autofocus": "off"
+  },
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/build/**",
+    "**/.next/**",
+    "**/.react-router/**",
+    "**/.output/**",
+    "**/.turbo/**",
+    "**/.tanstack/**",
+    "**/coverage/**",
+    "**/node_modules/**",
+    "**/routeTree.gen.ts",
+    "**/next-env.d.ts",
+    "**/test-results/**",
+    "**/playwright-report/**"
+  ]
+}
