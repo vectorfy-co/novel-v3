@@ -6,7 +6,6 @@
       "node",
       "vite/client"
     ],
-    "baseUrl": ".",
     "rootDirs": [
       ".",
       ".react-router/types"
