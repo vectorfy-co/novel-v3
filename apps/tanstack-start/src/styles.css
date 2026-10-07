@@ -1,0 +1,252 @@
+:root {
+  color-scheme: light dark;
+  --page-bg: #f8fafc;
+  --surface: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --accent: #6d28d9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page-bg: #0b1120;
+    --surface: #111827;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: #1f2937;
+    --accent: #a78bfa;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
+.page {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 2rem 16px 4rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin: 0 0 0.5rem;
+}
+
+.lede {
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+}
+
+kbd {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-family: ui-monospace, monospace;
+}
+
+.editor-placeholder,
+.editor-surface {
+  min-height: 320px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.editor-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+
+.editor-surface {
+  position: relative;
+  padding: 1.5rem;
+}
+
+.editor-prose {
+  min-height: 260px;
+  outline: none;
+}
+
+.editor-prose h1 {
+  font-size: 2rem;
+}
+
+.editor-prose h2 {
+  font-size: 1.5rem;
+}
+
+.editor-prose blockquote {
+  border-left: 3px solid var(--border);
+  margin-left: 0;
+  padding-left: 1rem;
+  color: var(--muted);
+}
+
+.editor-prose pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.editor-prose code {
+  background: var(--border);
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+.editor-prose img {
+  max-width: 100%;
+  border-radius: 6px;
+}
+
+.editor-prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+.editor-prose p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--muted);
+  pointer-events: none;
+  height: 0;
+}
+
+.editor-prose ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.editor-prose ul[data-type="taskList"] li {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.bubble-menu {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+  z-index: 50;
+}
+
+.bubble-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.bubble-button:hover {
+  background: var(--border);
+}
+
+.slash-menu {
+  z-index: 60;
+  min-width: 260px;
+  max-height: 330px;
+  overflow-y: auto;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+}
+
+.slash-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.slash-item[aria-selected="true"],
+.slash-item:hover {
+  background: var(--border);
+}
+
+.slash-icon {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.slash-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.slash-text small {
+  color: var(--muted);
+}
+
+.slash-empty {
+  padding: 6px 8px;
+  color: var(--muted);
+}
+
+.outputs {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.output-panel {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.output-panel figcaption {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.output-panel pre {
+  margin: 0;
+  padding: 12px;
+  max-height: 360px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.8125rem;
+}
