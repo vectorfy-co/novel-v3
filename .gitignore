@@ -63,3 +63,7 @@ apps/*/dist
 apps/rr7-ssr/.react-router/
 coverage/
 packages/*/coverage/
+
+# tanstack start
+.tanstack/
+apps/*/.tanstack/

@@ -11,7 +11,7 @@
     "format:fix": "oxfmt .",
     "lint": "turbo lint --continue --",
     "lint:fix": "turbo lint --continue -- --fix",
-    "test": "pnpm -r --if-present test",
+    "test": "turbo test --continue --",
     "ci:test": "pnpm -w test && pnpm --filter novel-next-app test:e2e",
     "clean": "turbo clean",
     "release": "turbo run release",

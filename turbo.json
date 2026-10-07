@@ -19,6 +19,7 @@
     },
     "check-types": {},
     "dev": {
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },
@@ -27,6 +28,9 @@
     },
     "release": {
       "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"]
     }
   }
 }
