@@ -68,6 +68,8 @@ const Horizontal = HorizontalRule.extend({
 
 export * from "./ai-highlight";
 export * from "./slash-command";
+export type { MathematicsOptions } from "./mathematics";
+export type { TwitterOptions } from "./twitter";
 export {
   CodeBlockLowlight,
   Horizontal as HorizontalRule,

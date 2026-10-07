@@ -7,6 +7,9 @@ import type { RefObject } from "react";
 import type { ReactNode } from "react";
 import { EditorCommandOut } from "../components/editor-command";
 
+// The editor instance is supplied by the extension, so callers never pass it.
+type SlashCommandSuggestion = Omit<SuggestionOptions, "editor">;
+
 const Command = Extension.create({
   name: "slash-command",
   addOptions() {
@@ -16,14 +19,14 @@ const Command = Extension.create({
         command: ({ editor, range, props }) => {
           props.command({ editor, range });
         },
-      } as SuggestionOptions,
+      } as SlashCommandSuggestion,
     };
   },
   addProseMirrorPlugins() {
     return [
       Suggestion({
-        editor: this.editor,
         ...this.options.suggestion,
+        editor: this.editor,
       }),
     ];
   },
