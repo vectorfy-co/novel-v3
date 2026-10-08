@@ -68,6 +68,7 @@ jobs:
   # Warning only: nudges authors to ship library changes with a version.
   changeset-guard:
     if: github.event_name == 'pull_request'
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

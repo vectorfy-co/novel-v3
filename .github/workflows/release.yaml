@@ -36,7 +36,8 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (github.event.workflow_run.conclusion == 'success' &&
        github.event.workflow_run.event == 'push' &&
-       github.event.workflow_run.head_branch == 'main')
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -56,7 +57,7 @@ jobs:
           REF: ${{ github.ref }}
         run: |
           if [ -n "$INPUT_TAG" ]; then
-            if ! printf '%s' "$INPUT_TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+            if [[ ! "$INPUT_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
               echo "::error::Tag input '$INPUT_TAG' is not a vX.Y.Z version tag."
               exit 1
             fi
@@ -75,7 +76,19 @@ jobs:
         id: plan
         env:
           EXPECT_TAG: ${{ inputs.tag }}
-        run: python3 scripts/release_novel.py plan --create-tag --expect-tag "$EXPECT_TAG"
+          CI_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          args=(plan --create-tag --expect-tag "$EXPECT_TAG")
+          if [ -z "$EXPECT_TAG" ]; then
+            head=$(git rev-parse HEAD)
+            main=$(git ls-remote --exit-code origin refs/heads/main | cut -f1)
+            if [ "$head" != "$main" ] || { [ -n "$CI_SHA" ] && [ "$head" != "$CI_SHA" ]; }; then
+              echo "::error::Refusing to release: checked-out commit must match the CI commit and current main head."
+              exit 1
+            fi
+            args+=(--require-main-head)
+          fi
+          python3 scripts/release_novel.py "${args[@]}"
 
   # Builds the tagged commit and publishes it. The only job with id-token.
   publish:
@@ -124,6 +137,9 @@ jobs:
 
       - name: Build package
         run: pnpm --filter @vectorfyco/novel-v3 build
+
+      - name: Include package documentation
+        run: cp LICENSE README.md packages/headless/
 
       - name: Publish to npm (OIDC trusted publishing)
         working-directory: packages/headless

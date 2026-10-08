@@ -66,6 +66,7 @@ Action = Literal["release", "noop", "error"]
 # --------------------------------------------------------------------------- #
 
 _SEMVER = re.compile(r"^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?$")
+_RECOVERY_TAG = re.compile(r"v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?")
 
 
 def semver_key(version: str) -> tuple[int, int, int, tuple[int, tuple[tuple[int, int, str], ...]]]:
@@ -169,12 +170,18 @@ def decide(facts: Facts) -> Decision:
             summary=summary or message,
         )
 
+    if facts.expect_tag is not None and not _RECOVERY_TAG.fullmatch(facts.expect_tag):
+        return make("error", "error", f"Invalid recovery tag: {facts.expect_tag!r}.")
+
     if facts.expect_tag is not None and facts.expect_tag != tag:
         return make(
             "error",
             "error",
             f"Requested tag {facts.expect_tag} does not match package.json version {version} (expected {tag}).",
         )
+
+    if facts.expect_tag is not None and facts.tag_commit is None:
+        return make("error", "error", f"Recovery requires existing remote tag {tag}; refusing to create it.")
 
     tagged_here = facts.tag_commit == facts.head
 
@@ -298,7 +305,7 @@ def git(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
 
 
 def fetch_published_versions(package_name: str) -> frozenset[str]:
-    """Every version on the registry. 404 means never published; other errors fail loudly."""
+    """Every version on the registry; failed or malformed lookups fail closed."""
     registry = os.getenv("NPM_REGISTRY", "https://registry.npmjs.org").rstrip("/")
     url = f"{registry}/{urllib.parse.quote(package_name, safe='@')}"
     request = urllib.request.Request(url, headers={"Accept": "application/vnd.npm.install-v1+json"})
@@ -307,13 +314,18 @@ def fetch_published_versions(package_name: str) -> frozenset[str]:
         try:
             with urllib.request.urlopen(request, timeout=30) as response:
                 data = json.load(response)
-            return frozenset(data.get("versions", {}).keys())
+            if not isinstance(data, dict) or not isinstance(data.get("versions"), dict) or not data["versions"]:
+                raise SystemExit(f"Could not read {url}: registry response has no published versions")
+            versions = frozenset(data["versions"])
+            if any(not _SEMVER.fullmatch(version) for version in versions):
+                raise SystemExit(f"Could not read {url}: registry response contains invalid versions")
+            return versions
         except urllib.error.HTTPError as error:
-            if error.code == 404:
-                return frozenset()
             last_error = error
         except (urllib.error.URLError, TimeoutError) as error:
             last_error = error
+        except (ValueError, UnicodeError) as error:
+            raise SystemExit(f"Could not read {url}: invalid registry response: {error}") from error
         time.sleep(2 * (attempt + 1))
     raise SystemExit(f"Could not read {url}: {last_error}")
 
@@ -409,6 +421,14 @@ def cmd_plan(args: argparse.Namespace) -> int:
         )
     )
 
+    # Check after the potentially slow registry lookup, before emitting a plan
+    # or mutating tags. Recovery of an existing tag deliberately bypasses this.
+    if args.require_main_head:
+        remote = git("ls-remote", "--exit-code", "origin", "refs/heads/main").stdout.split()
+        if not remote or remote[0] != head:
+            annotate("error", "Refusing to release: checked-out commit is no longer the current main head.")
+            return 1
+
     print(f"Decision: {decision.action} (tag={decision.tag}, create_tag={decision.create_tag}, "
           f"publish={decision.publish}, github_release={decision.github_release})")
     annotate(decision.level, decision.message)
@@ -483,6 +503,7 @@ def build_parser() -> argparse.ArgumentParser:
     plan = sub.add_parser("plan", help="decide what to release for the checked-out commit")
     plan.add_argument("--create-tag", action="store_true", help="push the version tag (tag ref only) when needed")
     plan.add_argument("--expect-tag", help="fail unless v<package.json version> equals this tag (manual recovery)")
+    plan.add_argument("--require-main-head", action="store_true", help="fail unless HEAD is still the remote main head")
     plan.set_defaults(func=cmd_plan)
 
     notes = sub.add_parser("notes", help="write the changelog section of a version to a file")

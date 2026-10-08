@@ -214,10 +214,10 @@ packages/
 ## ![CI/CD](https://img.shields.io/badge/CI%2FCD-Overview-1F4B99?style=for-the-badge&logo=githubactions&logoColor=white)
 
 - CI workflow runs on PRs and main pushes: install, lint, typecheck, format, build, Playwright install, then unit + E2E tests.
-- Release workflow (`release.yaml`) runs after a successful CI run on `main`. The version comes from the PR: run `pnpm changeset version` there to bump `packages/headless/package.json` and write `CHANGELOG.md`.
+- Release workflow (`release.yaml`) runs after a successful push CI run on `main` in this repository, checks out that CI commit, and refuses if it is no longer the current remote `main` head. The version comes from the PR: run `pnpm changeset version` there to bump `packages/headless/package.json` and write `CHANGELOG.md`.
 - If that version is not on npm yet, the workflow tags the merged commit `v<version>` (it pushes the tag only, never `main`), builds with `pnpm --filter @vectorfyco/novel-v3 build`, publishes to npm with provenance over OIDC trusted publishing (no npm token), and creates the GitHub release from the matching `CHANGELOG.md` section.
 - If the version is already on npm the run does nothing. If library files changed without a version bump the run publishes nothing and shows a warning ("library changed without a version bump: run `pnpm changeset version` in a PR"); PRs get the same warning from the CI changeset guard.
-- A failed tag push or publish fails the run. Re-run it, or dispatch the workflow with `tag` set to an existing `v*` tag, to publish that tag's commit; both are safe to repeat.
+- A failed registry lookup (including 404), remote lookup, tag push, or publish fails the run. Re-run it, or dispatch the workflow with `tag` set to an existing `vX.Y.Z` or prerelease tag matching its package version, to publish that tag's commit; both are safe to repeat.
 - The release path filter lives in `scripts/release_novel.py`; its decision logic is covered by `uv run --python 3.12 -m unittest scripts/test_release_novel.py`.
 
 ## ![Auth](https://img.shields.io/badge/Auth%20%26%20Routes-None-2563EB?style=for-the-badge&logo=auth0&logoColor=white)
