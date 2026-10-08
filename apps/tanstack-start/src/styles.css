@@ -308,3 +308,32 @@ kbd {
   word-break: break-word;
   font-size: 0.8125rem;
 }
+
+.link-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.link-popover input {
+  min-width: 0;
+  width: 180px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.link-popover button {
+  color: var(--text);
+  background: var(--border);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
