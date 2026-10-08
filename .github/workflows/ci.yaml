@@ -64,3 +64,20 @@ jobs:
 
       - name: Test (unit + e2e)
         run: pnpm -w ci:test
+
+  # Warning only: nudges authors to ship library changes with a version.
+  changeset-guard:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Check for a version bump or changeset
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python3 scripts/release_novel.py check-pr --base "$BASE_SHA" --head "$HEAD_SHA"

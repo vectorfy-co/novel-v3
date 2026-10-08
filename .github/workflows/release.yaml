@@ -1,4 +1,13 @@
-name: Release Bump
+name: Release
+
+# Releases are driven by the version in packages/headless/package.json, which a
+# PR sets with `pnpm changeset version`. After a successful CI run on main this
+# workflow tags the merged commit (tag only, never a branch push), publishes to
+# npm with provenance over OIDC trusted publishing, and creates the GitHub
+# release from the changelog. No secrets are used: GITHUB_TOKEN and OIDC only.
+#
+# Recovery: dispatch this workflow with `tag` set to an existing vX.Y.Z tag to
+# publish that tag's commit (for example after a failed publish).
 
 on:
   workflow_run:
@@ -8,92 +17,80 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing tag to publish via OIDC (e.g. v2.0.1)"
+        description: "Existing tag to release (e.g. v3.0.0). Leave empty to re-run the release for the tip of main."
         required: false
         type: string
 
 permissions:
-  contents: write
-  id-token: write
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
-  bump:
+  # Decides what to do and, when needed, pushes the version tag. Pushes the tag
+  # ref only; the script contains no branch push.
+  prepare:
     if: |
-      github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.event == 'push' &&
-      github.event.workflow_run.head_branch == 'main'
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.workflow_run.head_sha }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: lts/*
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: false
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Configure git user
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Bump and tag if needed
-        id: release
-        env:
-          RELEASE_PATHS: packages/headless/src,packages/headless/package.json,packages/headless/tsup.config.ts,packages/headless/tsconfig.json,packages/headless/tsconfig.build.json,packages/headless/scripts,.oxlintrc.json,.oxfmtrc.json,pnpm-lock.yaml
-        run: |
-          set +e
-          output=$(uv run --python 3.12 scripts/release_novel.py --commit --tag --push 2>&1)
-          status=$?
-          set -e
-
-          echo "$output"
-
-          if [ $status -eq 0 ]; then
-            exit 0
-          fi
-
-          if echo "$output" | grep -q "GH013: Repository rule violations found for refs/heads/main"; then
-            echo "Repository rules block direct pushes to main; skipping automated release bump."
-            echo "release=false" >> "$GITHUB_OUTPUT"
-            echo "version=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          exit $status
+    permissions:
+      contents: write
     outputs:
-      release: ${{ steps.release.outputs.release }}
-      version: ${{ steps.release.outputs.version }}
+      action: ${{ steps.plan.outputs.action }}
+      version: ${{ steps.plan.outputs.version }}
+      tag: ${{ steps.plan.outputs.tag }}
+      publish: ${{ steps.plan.outputs.publish }}
+      github_release: ${{ steps.plan.outputs.github_release }}
+      npm_tag: ${{ steps.plan.outputs.npm_tag }}
+      prerelease: ${{ steps.plan.outputs.prerelease }}
+    steps:
+      - name: Validate manual dispatch
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+          REF: ${{ github.ref }}
+        run: |
+          if [ -n "$INPUT_TAG" ]; then
+            if ! printf '%s' "$INPUT_TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+              echo "::error::Tag input '$INPUT_TAG' is not a vX.Y.Z version tag."
+              exit 1
+            fi
+          elif [ "$REF" != "refs/heads/main" ]; then
+            echo "::error::Without a tag input this workflow must be dispatched from main (got $REF)."
+            exit 1
+          fi
 
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha || (inputs.tag && format('refs/tags/{0}', inputs.tag)) || github.sha }}
+
+      - name: Plan release and tag
+        id: plan
+        env:
+          EXPECT_TAG: ${{ inputs.tag }}
+        run: python3 scripts/release_novel.py plan --create-tag --expect-tag "$EXPECT_TAG"
+
+  # Builds the tagged commit and publishes it. The only job with id-token.
   publish:
-    needs: bump
-    if: needs.bump.outputs.release == 'true'
+    needs: prepare
+    if: needs.prepare.outputs.publish == 'true'
     runs-on: ubuntu-latest
     environment: npm-publish
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - name: Checkout
+      - name: Checkout tag
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0
-          ref: v${{ needs.bump.outputs.version }}
+          ref: refs/tags/${{ needs.prepare.outputs.tag }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -108,64 +105,79 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
           registry-url: https://registry.npmjs.org/
 
+      # Trusted publishing needs npm >= 11.5.1.
       - name: Update npm
         run: npm install -g npm@11.5.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check tagged version
+        env:
+          EXPECTED_VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          actual=$(node -p "require('./packages/headless/package.json').version")
+          if [ "$actual" != "$EXPECTED_VERSION" ]; then
+            echo "::error::package.json at the tag is $actual but the plan expected $EXPECTED_VERSION."
+            exit 1
+          fi
+
       - name: Build package
         run: pnpm --filter @vectorfyco/novel-v3 build
 
       - name: Publish to npm (OIDC trusted publishing)
-        run: npm publish --access public --provenance
         working-directory: packages/headless
+        env:
+          NPM_TAG: ${{ needs.prepare.outputs.npm_tag }}
+        run: npm publish --access public --provenance --tag "$NPM_TAG"
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
-          tag_name: v${{ needs.bump.outputs.version }}
+      - name: Summary
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: echo "Published @vectorfyco/novel-v3@$VERSION to npm with provenance." >> "$GITHUB_STEP_SUMMARY"
 
-  publish_existing_tag:
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.tag != ''
+  # Creates the GitHub release from the changelog. Runs when the publish job
+  # succeeded or was not needed because the version is already on npm.
+  github_release:
+    needs: [prepare, publish]
+    if: |
+      !cancelled() &&
+      needs.prepare.result == 'success' &&
+      needs.prepare.outputs.github_release == 'true' &&
+      (needs.publish.result == 'success' || needs.publish.result == 'skipped')
     runs-on: ubuntu-latest
-    environment: npm-publish
+    permissions:
+      contents: write
     steps:
-      - name: Checkout
+      - name: Checkout tag
         uses: actions/checkout@v6
         with:
-          fetch-depth: 0
-          ref: ${{ github.event.inputs.tag }}
+          ref: refs/tags/${{ needs.prepare.outputs.tag }}
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          PRERELEASE: ${{ needs.prepare.outputs.prerelease }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "GitHub release $TAG already exists; nothing to do."
+            exit 0
+          fi
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: lts/*
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-          registry-url: https://registry.npmjs.org/
+          python3 scripts/release_novel.py notes "$VERSION" --out "$RUNNER_TEMP/release-notes.md"
 
-      - name: Update npm
-        run: npm install -g npm@11.5.1
+          args=("$TAG" --verify-tag --title "$TAG")
+          if [ -s "$RUNNER_TEMP/release-notes.md" ]; then
+            args+=(--notes-file "$RUNNER_TEMP/release-notes.md")
+          else
+            args+=(--generate-notes)
+          fi
+          if [ "$PRERELEASE" = "true" ]; then
+            args+=(--prerelease)
+          fi
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build package
-        run: pnpm --filter @vectorfyco/novel-v3 build
-
-      - name: Publish to npm (OIDC trusted publishing)
-        run: npm publish --access public --provenance
-        working-directory: packages/headless
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
-          tag_name: ${{ github.event.inputs.tag }}
+          gh release create "${args[@]}"
+          echo "Created GitHub release $TAG." >> "$GITHUB_STEP_SUMMARY"
