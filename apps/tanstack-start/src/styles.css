@@ -352,3 +352,20 @@ kbd {
 .editor-prose li[data-type="taskItem"] > div > p:first-child {
   margin-top: 0;
 }
+
+.image-dialog {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.image-dialog form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.image-dialog::backdrop {
+  background: rgb(0 0 0 / 0.3);
+}

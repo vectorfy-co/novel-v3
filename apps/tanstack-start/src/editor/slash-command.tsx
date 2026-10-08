@@ -12,10 +12,6 @@ import {
   Type,
 } from "lucide-react";
 
-const PLACEHOLDER_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360"><rect width="100%" height="100%" fill="#e5e7eb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#6b7280">Image placeholder</text></svg>',
-)}`;
-
 export const suggestionItems = createSuggestionItems([
   {
     title: "Text",
@@ -100,11 +96,27 @@ export const suggestionItems = createSuggestionItems([
   },
   {
     title: "Image",
-    description: "Insert an image placeholder.",
+    description: "Insert an image from a URL.",
     searchTerms: ["photo", "picture", "media"],
     icon: <ImageIcon size={18} />,
     command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setImage({ src: PLACEHOLDER_IMAGE }).run();
+      const dialog = document.createElement("dialog");
+      dialog.className = "image-dialog";
+      dialog.setAttribute("aria-label", "Insert image");
+      dialog.innerHTML =
+        '<form><label>Image URL <input name="src" type="url" required placeholder="https://…" /></label><button type="submit">Insert image</button><button type="button">Cancel</button></form>';
+      const input = dialog.querySelector<HTMLInputElement>("input");
+      dialog.querySelector("form")?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const src = input?.value.trim();
+        if (!src) return;
+        editor.chain().focus().deleteRange(range).setImage({ src }).run();
+        dialog.close();
+      });
+      dialog.querySelector('button[type="button"]')?.addEventListener("click", () => dialog.close());
+      dialog.addEventListener("close", () => dialog.remove(), { once: true });
+      document.body.append(dialog);
+      dialog.showModal();
     },
   },
 ]);
