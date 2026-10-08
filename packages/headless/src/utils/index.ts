@@ -36,6 +36,10 @@ export function getUrlFromString(str: string) {
   }
 }
 
+// Prefer the configured Markdown manager: the static renderer loses list nesting,
+// emits task HTML and stringifies null code/image attributes. Keep its fallback
+// for editors that intentionally omit the Markdown extension.
+
 // Get the text before a given position in markdown format
 export const getPrevText = (editor: EditorInstance, position: number) => {
   const nodes: Node[] = [];
@@ -48,6 +52,8 @@ export const getPrevText = (editor: EditorInstance, position: number) => {
   const fragment = Fragment.fromArray(nodes);
   const doc = editor.state.doc.copy(fragment);
 
+  if (editor.markdown) return editor.markdown.serialize(doc.toJSON());
+
   return renderToMarkdown({
     content: doc,
     extensions: getRenderingExtensions(editor),
@@ -59,6 +65,8 @@ export const getAllContent = (editor: EditorInstance) => {
   const fragment = editor.state.doc.content;
   const doc = editor.state.doc.copy(fragment);
 
+  if (editor.markdown) return editor.markdown.serialize(doc.toJSON());
+
   return renderToMarkdown({
     content: doc,
     extensions: getRenderingExtensions(editor),
@@ -69,6 +77,8 @@ export const getAllContent = (editor: EditorInstance) => {
 export const getSelectionText = (editor: EditorInstance) => {
   const slice = editor.state.selection.content();
   const doc = editor.state.doc.copy(slice.content);
+
+  if (editor.markdown) return editor.markdown.serialize(doc.toJSON());
 
   return renderToMarkdown({
     content: doc,

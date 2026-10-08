@@ -24,6 +24,9 @@
   - `getAllContent` and the Markdown helpers no longer re-register extensions on every call, which removed the repeated "duplicate extension names" warning while typing.
   - The default client and server bundles register the horizontal rule, code block and image extensions once each.
   
+  - Markdown output helpers preserve nested bullet, ordered and task lists using the configured Markdown serializer.
+  - Markdown output helpers emit bare code fences, GitHub task syntax and empty alt text for missing attributes.
+  
   **Compatibility**
   
   - No export was removed or renamed, and no option or prop was removed. Slash-command (`Command`) options stay as permissive as in 2.0.1.
