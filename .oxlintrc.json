@@ -26,6 +26,7 @@
     "**/routeTree.gen.ts",
     "**/next-env.d.ts",
     "**/test-results/**",
+    "**/.cache/**",
     "**/playwright-report/**"
   ]
 }

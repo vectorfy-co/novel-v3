@@ -70,3 +70,6 @@ apps/*/.tanstack/
 
 # local review evidence
 .codex-artifacts/
+
+# CI browser cache (PLAYWRIGHT_BROWSERS_PATH)
+/.cache/

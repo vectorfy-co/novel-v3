@@ -25,6 +25,7 @@
     "**/CHANGELOG.md",
     "**/next-env.d.ts",
     "**/test-results/**",
+    "**/.cache/**",
     "**/.codex-artifacts/**"
   ],
   "sortPackageJson": false
