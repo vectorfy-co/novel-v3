@@ -29,16 +29,26 @@ test("editor typing + basic formatting", async ({ page }) => {
   await expect(editor.locator("em", { hasText: "Italic" })).toBeVisible();
 });
 
-test("slash command typing adds text", async ({ page }) => {
+test("slash command inserts a heading", async ({ page }) => {
   await page.goto("/");
   const editor = await waitForEditor(page);
-
+  const previousHeadings = await editor.locator("h2").count();
   await editor.click();
-  await expect(editor).toBeFocused();
-  await editor.type("/heading 2");
+  await editor.evaluate((surface) => {
+    const range = document.createRange();
+    range.selectNodeContents(surface);
+    range.collapse(false);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  });
   await editor.press("Enter");
+  await page.keyboard.type("/heading");
+  await page.getByRole("option", { name: /Heading 2 Medium section heading/ }).click();
+  await expect(editor).toBeFocused();
   await page.keyboard.type("Slash Heading");
-  await expect(editor).toContainText("Slash Heading");
+  await expect(editor.locator("h2")).toHaveCount(previousHeadings + 1);
+  await expect(editor.locator("h2", { hasText: "Slash Heading" })).toBeVisible();
 });
 
 test("bubble menu + math conversion", async ({ page }) => {

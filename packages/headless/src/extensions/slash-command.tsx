@@ -2,12 +2,15 @@ import { Extension } from "@tiptap/core";
 import type { Editor, Range } from "@tiptap/core";
 import { autoUpdate, computePosition, flip, offset, shift, type VirtualElement } from "@floating-ui/dom";
 import { ReactRenderer } from "@tiptap/react";
-import Suggestion, { type SuggestionOptions } from "@tiptap/suggestion";
+import { Suggestion, type SuggestionOptions } from "@tiptap/suggestion";
 import type { RefObject } from "react";
 import type { ReactNode } from "react";
 import { EditorCommandOut } from "../components/editor-command";
 
-const Command = Extension.create({
+// The editor instance is supplied by the extension, so callers never pass it.
+type SlashCommandSuggestion = Omit<SuggestionOptions, "editor">;
+
+const Command: Extension = Extension.create({
   name: "slash-command",
   addOptions() {
     return {
@@ -16,14 +19,14 @@ const Command = Extension.create({
         command: ({ editor, range, props }) => {
           props.command({ editor, range });
         },
-      } as SuggestionOptions,
+      } as SlashCommandSuggestion,
     };
   },
   addProseMirrorPlugins() {
     return [
       Suggestion({
-        editor: this.editor,
         ...this.options.suggestion,
+        editor: this.editor,
       }),
     ];
   },

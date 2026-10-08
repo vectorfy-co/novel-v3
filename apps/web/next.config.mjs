@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: { NEXT_PUBLIC_VERCEL_ANALYTICS_ENABLED: process.env.VERCEL === "1" ? "true" : "false" },
   redirects: async () => {
     return [
       {
@@ -29,8 +30,7 @@ const nextConfig = {
       },
       {
         source: "/vscode",
-        destination:
-          "https://marketplace.visualstudio.com/items?itemName=bennykok.novel-vscode",
+        destination: "https://marketplace.visualstudio.com/items?itemName=bennykok.novel-vscode",
         permanent: false,
       },
       {

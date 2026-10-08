@@ -11,8 +11,8 @@ import {
   MessageSquarePlus,
   Text,
   TextQuote,
-  Twitter,
-  Youtube,
+  MessageCircle,
+  Video,
 } from "lucide-react";
 import { uploadFn } from "./image-upload";
 
@@ -129,7 +129,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Youtube",
     description: "Embed a Youtube video.",
     searchTerms: ["video", "youtube", "embed"],
-    icon: <Youtube size={18} />,
+    icon: <Video size={18} />,
     command: ({ editor, range }) => {
       const videoLink = prompt("Please enter Youtube Video Link");
       //From https://regexr.com/3dj5t
@@ -157,7 +157,7 @@ export const suggestionItems = createSuggestionItems([
     title: "Twitter",
     description: "Embed a Tweet.",
     searchTerms: ["twitter", "embed"],
-    icon: <Twitter size={18} />,
+    icon: <MessageCircle size={18} />,
     command: ({ editor, range }) => {
       const tweetLink = prompt("Please enter Twitter Link");
       const tweetRegex = new RegExp(/^https?:\/\/(www\.)?x\.com\/([a-zA-Z0-9_]{1,15})(\/status\/(\d+))?(\/\S*)?$/);

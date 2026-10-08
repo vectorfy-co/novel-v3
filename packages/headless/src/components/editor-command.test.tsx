@@ -4,11 +4,11 @@ import { EditorCommand, EditorCommandOut, EditorCommandPortalContext } from "./e
 import { novelStore } from "../utils/store";
 import { queryAtom, rangeAtom } from "../utils/atoms";
 
-let lastCommandProps: Record<string, unknown> | null = null;
+const commandRender = vi.hoisted(() => vi.fn<(props: Record<string, unknown>) => void>());
 
 vi.mock("cmdk", () => {
   const Command = ({ children, ...props }: { children: React.ReactNode }) => {
-    lastCommandProps = props;
+    commandRender(props);
     return (
       <div data-testid="cmdk" {...props}>
         {children}
@@ -81,7 +81,7 @@ describe("EditorCommand", () => {
     expect(screen.getByTestId("cmdk-input")).toBeInTheDocument();
 
     const stopPropagation = vi.fn();
-    (lastCommandProps?.onKeyDown as (event: KeyboardEvent) => void)?.({
+    (commandRender.mock.lastCall?.[0].onKeyDown as (event: KeyboardEvent) => void)?.({
       stopPropagation,
     } as KeyboardEvent);
     expect(stopPropagation).toHaveBeenCalled();

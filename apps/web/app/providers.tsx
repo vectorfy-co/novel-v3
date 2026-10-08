@@ -34,7 +34,7 @@ export default function Providers({ children }: { children: ReactNode }) {
       >
         <ToasterProvider />
         {children}
-        <Analytics />
+        {process.env.NEXT_PUBLIC_VERCEL_ANALYTICS_ENABLED === "true" && <Analytics />}
       </AppContext.Provider>
     </ThemeProvider>
   );

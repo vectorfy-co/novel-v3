@@ -1,12 +1,26 @@
 import { renderToMarkdown } from "@tiptap/static-renderer/pm/markdown";
+import type { Extensions } from "@tiptap/core";
 import { Fragment, type Node } from "@tiptap/pm/model";
 import type { EditorInstance } from "../components";
+
+// The manager already contains every child extension. The static renderer expands addExtensions
+// again, so use cached rendering copies that retain options/renderers but do not expand bundles.
+const renderingExtensions = new WeakMap<Extensions, Extensions>();
+const getRenderingExtensions = (editor: EditorInstance): Extensions => {
+  const registered = editor.extensionManager.extensions;
+  let extensions = renderingExtensions.get(registered);
+  if (!extensions) {
+    extensions = registered.map((extension) => extension.extend({ addExtensions: () => [] }));
+    renderingExtensions.set(registered, extensions);
+  }
+  return extensions;
+};
 
 export function isValidUrl(url: string) {
   try {
     new URL(url);
     return true;
-  } catch (_e) {
+  } catch {
     return false;
   }
 }
@@ -17,10 +31,14 @@ export function getUrlFromString(str: string) {
     if (str.includes(".") && !str.includes(" ")) {
       return new URL(`https://${str}`).toString();
     }
-  } catch (_e) {
+  } catch {
     return null;
   }
 }
+
+// Prefer the configured Markdown manager: the static renderer loses list nesting,
+// emits task HTML and stringifies null code/image attributes. Keep its fallback
+// for editors that intentionally omit the Markdown extension.
 
 // Get the text before a given position in markdown format
 export const getPrevText = (editor: EditorInstance, position: number) => {
@@ -34,9 +52,11 @@ export const getPrevText = (editor: EditorInstance, position: number) => {
   const fragment = Fragment.fromArray(nodes);
   const doc = editor.state.doc.copy(fragment);
 
+  if (editor.markdown) return editor.markdown.serialize(doc.toJSON());
+
   return renderToMarkdown({
     content: doc,
-    extensions: editor.extensionManager.extensions,
+    extensions: getRenderingExtensions(editor),
   });
 };
 
@@ -45,9 +65,11 @@ export const getAllContent = (editor: EditorInstance) => {
   const fragment = editor.state.doc.content;
   const doc = editor.state.doc.copy(fragment);
 
+  if (editor.markdown) return editor.markdown.serialize(doc.toJSON());
+
   return renderToMarkdown({
     content: doc,
-    extensions: editor.extensionManager.extensions,
+    extensions: getRenderingExtensions(editor),
   });
 };
 
@@ -56,8 +78,10 @@ export const getSelectionText = (editor: EditorInstance) => {
   const slice = editor.state.selection.content();
   const doc = editor.state.doc.copy(slice.content);
 
+  if (editor.markdown) return editor.markdown.serialize(doc.toJSON());
+
   return renderToMarkdown({
     content: doc,
-    extensions: editor.extensionManager.extensions,
+    extensions: getRenderingExtensions(editor),
   });
 };

@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 120,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "jsxSingleQuote": false,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/build/**",
+    "**/.next/**",
+    "**/.react-router/**",
+    "**/.output/**",
+    "**/.turbo/**",
+    "**/coverage/**",
+    "**/node_modules/**",
+    "**/routeTree.gen.ts",
+    "**/*.tsbuildinfo",
+    "pnpm-lock.yaml",
+    "**/CHANGELOG.md",
+    "**/next-env.d.ts",
+    "**/test-results/**",
+    "**/.cache/**",
+    "**/.codex-artifacts/**"
+  ],
+  "sortPackageJson": false
+}

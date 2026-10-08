@@ -31,7 +31,7 @@ vi.mock("@floating-ui/dom", () => ({
 }));
 
 vi.mock("@tiptap/suggestion", () => ({
-  default: vi.fn(() => ({ key: "suggestion" })),
+  Suggestion: vi.fn(() => ({ key: "suggestion" })),
 }));
 
 describe("slash-command", () => {
@@ -59,7 +59,7 @@ describe("slash-command", () => {
     expect(commandSpy).toHaveBeenCalled();
 
     const plugins = Command.config.addProseMirrorPlugins.call({ editor: {}, options });
-    const { default: suggestionMock } = await import("@tiptap/suggestion");
+    const { Suggestion: suggestionMock } = await import("@tiptap/suggestion");
     expect(suggestionMock).toHaveBeenCalled();
     expect(plugins).toHaveLength(1);
   });

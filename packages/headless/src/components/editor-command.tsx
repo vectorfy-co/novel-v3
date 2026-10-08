@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { Command } from "cmdk";
 import { queryAtom, rangeAtom } from "../utils/atoms";
 import { novelStore } from "../utils/store";
-import type { ComponentPropsWithoutRef, FC, ReactNode } from "react";
+import type { ComponentPropsWithoutRef, FC } from "react";
 import type { Range } from "@tiptap/core";
 
 interface PortalContextValue {

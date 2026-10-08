@@ -14,7 +14,7 @@ app.use(express.static(path.join(rootDir, "build/client"), { maxAge: "1h" }));
 const buildUrl = pathToFileURL(path.join(rootDir, "build/server/index.js")).href;
 const build = await import(buildUrl);
 
-app.all("*", createRequestHandler({ build }));
+app.all("/{*splat}", createRequestHandler({ build }));
 
 const port = process.env.PORT ?? 3000;
 

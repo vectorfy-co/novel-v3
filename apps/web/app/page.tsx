@@ -3,7 +3,7 @@ import { Button } from "@/components/tailwind/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/tailwind/ui/dialog";
 import Menu from "@/components/tailwind/ui/menu";
 import { ScrollArea } from "@/components/tailwind/ui/scroll-area";
-import { BookOpen, GithubIcon } from "lucide-react";
+import { BookOpen, GitBranch } from "lucide-react";
 import Link from "next/link";
 
 export default function Page() {
@@ -12,7 +12,7 @@ export default function Page() {
       <div className="flex w-full max-w-[1024px] items-center gap-2 px-4 sm:mb-[calc(20vh)]">
         <Button size="icon" variant="outline">
           <a href="https://github.com/steven-tey/novel" target="_blank" rel="noreferrer">
-            <GithubIcon />
+            <GitBranch />
           </a>
         </Button>
         <Dialog>
@@ -28,7 +28,7 @@ export default function Page() {
             </ScrollArea>
           </DialogContent>
         </Dialog>
-        <Link href="/docs" className="ml-auto">
+        <Link href="https://github.com/vectorfy-co/novel-v3#readme" className="ml-auto">
           <Button variant="ghost">Documentation</Button>
         </Link>
         <Menu />

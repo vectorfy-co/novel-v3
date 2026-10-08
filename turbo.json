@@ -1,54 +1,25 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "**/.env.*local"
-  ],
+  "agentGuidance": false,
+  "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "topo": {
-      "dependsOn": [
-        "^topo"
-      ]
+      "dependsOn": ["^topo"]
     },
     "build": {
-      "dependsOn": [
-        "^build",
-        "typecheck"
-      ],
-      "outputs": [
-        "dist/**",
-        "build/**",
-        ".next/**",
-        "!.next/cache/**"
-      ]
+      "dependsOn": ["^build", "typecheck"],
+      "outputs": ["dist/**", "build/**", ".next/**", "!.next/cache/**"]
     },
     "typecheck": {
-      "dependsOn": [
-        "^topo"
-      ],
+      "dependsOn": ["^topo", "^build"],
       "outputs": []
     },
     "lint": {
-      "dependsOn": [
-        "^topo"
-      ]
-    },
-    "format": {
-      "dependsOn": [
-        "^topo"
-      ]
-    },
-    "lint:fix": {
-      "dependsOn": [
-        "^topo"
-      ]
-    },
-    "format:fix": {
-      "dependsOn": [
-        "^topo"
-      ]
+      "dependsOn": ["^topo"]
     },
     "check-types": {},
     "dev": {
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },
@@ -57,6 +28,12 @@
     },
     "release": {
       "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "@vectorfyco/novel-v3#test": {
+      "dependsOn": ["build"]
     }
   }
 }

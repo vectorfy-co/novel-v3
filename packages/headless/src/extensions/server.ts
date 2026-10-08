@@ -1,17 +1,17 @@
 import { InputRule } from "@tiptap/core";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
-import Highlight from "@tiptap/extension-highlight";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
-import TiptapImage from "@tiptap/extension-image";
-import TiptapLink from "@tiptap/extension-link";
+import { Highlight } from "@tiptap/extension-highlight";
+import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
+import { Image as TiptapImage } from "@tiptap/extension-image";
+import { Link as TiptapLink } from "@tiptap/extension-link";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
 import { TextStyle } from "@tiptap/extension-text-style";
-import TiptapUnderline from "@tiptap/extension-underline";
-import Youtube from "@tiptap/extension-youtube";
+import { Underline as TiptapUnderline } from "@tiptap/extension-underline";
+import { Youtube } from "@tiptap/extension-youtube";
 import { CharacterCount, Placeholder } from "@tiptap/extensions";
 import { Markdown } from "@tiptap/markdown";
-import StarterKit from "@tiptap/starter-kit";
+import { StarterKit } from "@tiptap/starter-kit";
 import { common, createLowlight } from "lowlight";
 import { AIHighlight } from "./ai-highlight";
 import CustomKeymap from "./custom-keymap";
@@ -39,6 +39,8 @@ const MarkdownExtension = Markdown.configure({
 });
 
 const StarterKitExtension = StarterKit.configure({
+  horizontalRule: false,
+  codeBlock: false,
   link: false,
   underline: false,
 });
@@ -92,7 +94,6 @@ export const serverExtensions = [
   StarterKitExtension,
   PlaceholderExtension,
   TiptapLink,
-  TiptapImage,
   UpdatedImage,
   TaskList,
   TaskItem,

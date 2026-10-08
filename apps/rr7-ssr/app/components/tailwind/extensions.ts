@@ -14,7 +14,6 @@ import {
   TaskItem,
   TaskList,
   TextStyle,
-  TiptapImage,
   TiptapLink,
   TiptapUnderline,
   Twitter,
@@ -38,7 +37,7 @@ const tiptapLink = TiptapLink.configure({
   },
 });
 
-const tiptapImage = TiptapImage.extend({
+const updatedImage = UpdatedImage.extend({
   addProseMirrorPlugins() {
     return [
       UploadImagesPlugin({
@@ -48,12 +47,6 @@ const tiptapImage = TiptapImage.extend({
   },
 }).configure({
   allowBase64: true,
-  HTMLAttributes: {
-    class: cx("rounded-lg border border-muted"),
-  },
-});
-
-const updatedImage = UpdatedImage.configure({
   HTMLAttributes: {
     class: cx("rounded-lg border border-muted"),
   },
@@ -98,11 +91,7 @@ const starterKit = StarterKit.configure({
       class: cx("border-l-4 border-primary"),
     },
   },
-  codeBlock: {
-    HTMLAttributes: {
-      class: cx("rounded-md bg-muted text-muted-foreground border p-5 font-mono font-medium"),
-    },
-  },
+  codeBlock: false,
   code: {
     HTMLAttributes: {
       class: cx("rounded-md bg-muted  px-1.5 py-1 font-mono font-medium"),
@@ -123,6 +112,9 @@ const codeBlockLowlight = CodeBlockLowlight.configure({
   // configure lowlight: common /  all / use highlightJS in case there is a need to specify certain language grammars only
   // common: covers 37 language grammars which should be good enough in most cases
   lowlight: createLowlight(common),
+  HTMLAttributes: {
+    class: cx("rounded-md bg-muted text-muted-foreground border p-5 font-mono font-medium"),
+  },
 });
 
 const youtube = Youtube.configure({
@@ -161,7 +153,6 @@ export const defaultExtensions = [
   starterKit,
   placeholder,
   tiptapLink,
-  tiptapImage,
   updatedImage,
   taskList,
   taskItem,
