@@ -190,7 +190,7 @@ kbd {
   padding-left: 0;
 }
 
-.editor-prose ul[data-type="taskList"] li[data-type="taskItem"] {
+.editor-prose ul[data-type="taskList"] li[data-checked] {
   display: flex;
   gap: 0.5rem;
 }
@@ -338,18 +338,18 @@ kbd {
   cursor: pointer;
 }
 
-.editor-prose li[data-type="taskItem"] > label {
+.editor-prose li[data-checked] > label {
   flex: 0 0 auto;
   padding-top: 2px;
   user-select: none;
 }
 
-.editor-prose li[data-type="taskItem"] > div {
+.editor-prose li[data-checked] > div {
   flex: 1 1 auto;
   min-width: 0;
 }
 
-.editor-prose li[data-type="taskItem"] > div > p:first-child {
+.editor-prose li[data-checked] > div > p:first-child {
   margin-top: 0;
 }
 

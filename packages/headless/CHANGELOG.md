@@ -26,7 +26,7 @@
   
   - Markdown output helpers preserve nested bullet, ordered and task lists using the configured Markdown serializer.
   - Markdown output helpers emit bare code fences, GitHub task syntax and empty alt text for missing attributes.
-  
+
   **Compatibility**
   
   - No export was removed or renamed, and no option or prop was removed. Slash-command (`Command`) options stay as permissive as in 2.0.1.
