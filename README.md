@@ -215,7 +215,8 @@ packages/
 
 - CI workflow runs on PRs and main pushes: install, lint, typecheck, format, build, Playwright install, then unit + E2E tests.
 - Release bump workflow runs after a successful main CI run and uses `scripts/release_novel.py` to bump, tag, and push when relevant changes exist.
-- Publish workflow triggers on `v*` tags and publishes `@vectorfyco/novel-v3` to npm with provenance.
+- The same workflow then publishes `@vectorfyco/novel-v3` to npm with provenance over OIDC trusted publishing. It can also be dispatched manually with an existing `v*` tag to publish that tag.
+- The version comes from `packages/headless/package.json`: run `pnpm changeset version` in the PR to set it and write the changelog. If the file still matches the version on npm, the script falls back to a patch bump.
 - The release path filter is scoped to `packages/headless` sources and build configs.
 
 ## ![Auth](https://img.shields.io/badge/Auth%20%26%20Routes-None-2563EB?style=for-the-badge&logo=auth0&logoColor=white)

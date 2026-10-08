@@ -23,6 +23,8 @@ DEFAULT_RELEASE_PATHS = [
     PACKAGE_DIR / "package.json",
     PACKAGE_DIR / "tsup.config.ts",
     PACKAGE_DIR / "tsconfig.json",
+    PACKAGE_DIR / "tsconfig.build.json",
+    PACKAGE_DIR / "scripts",
     Path(".oxlintrc.json"),
     Path(".oxfmtrc.json"),
 ]
