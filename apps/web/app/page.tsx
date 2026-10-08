@@ -28,7 +28,7 @@ export default function Page() {
             </ScrollArea>
           </DialogContent>
         </Dialog>
-        <Link href="/docs" className="ml-auto">
+        <Link href="https://github.com/vectorfy-co/novel-v3#readme" className="ml-auto">
           <Button variant="ghost">Documentation</Button>
         </Link>
         <Menu />
